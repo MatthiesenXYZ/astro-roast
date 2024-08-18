@@ -1,0 +1,39 @@
+---
+import { db } from "astro:db";
+import { languages } from "../../lib/supportedLanguages";
+import { RoastCollection } from "astro:db";
+import { eq } from "astro:db";
+import Layout from "../../layouts/Layout.astro";
+import { and } from "astro:db";
+
+
+const { language, username } = Astro.params;
+
+if (!language || !username) {
+    throw new Error("Language and username are required.");
+}
+
+if ( languages[language] === undefined || languages[language] === null ) {
+    throw new Error(`Language "${language}" is not yet supported.`);
+}
+
+const roastData = await db
+    .select()
+    .from(RoastCollection)
+    .where(and(
+        eq(RoastCollection.username, username), 
+        eq(RoastCollection.language, language)
+    ))
+    .get();
+
+---
+
+<Layout title={`Roast for ${username}`}>
+
+    <h1>Roast for {username}</h1>
+    {roastData ? (
+        <p>{roastData.response}</p>
+    ) : (
+        <p>No roast found for {username} in {language}.</p>
+    )}
+</Layout>
