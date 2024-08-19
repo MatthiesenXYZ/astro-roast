@@ -5,7 +5,7 @@ import type { APIContext, APIRoute } from "astro";
 import { languages } from "../lib/supportedLanguages";
 import { and, db, eq, RoastCollection } from "astro:db";
 
-const { OPENAI_MODEL, OPENAI_STREAM, OPENAI_SYS_PROMPT } = OPENAI_SETTINGS;
+const { OPENAI_MODEL, OPENAI_SYS_PROMPT } = OPENAI_SETTINGS;
 
 const client = new OpenAI({
     apiKey: OPENAI_API_KEY

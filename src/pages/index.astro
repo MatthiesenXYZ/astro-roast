@@ -1,26 +1,18 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { Card, Input, Select, Option, Divider, Button } from "astrolace:components";
+import { Card, Input, Select, Option, Button } from "astrolace:components";
 import { languages } from "../lib/supportedLanguages";
-import { db } from "astro:db";
-import { RoastCollection } from "astro:db";
-
-const previousRoasts = await db.select().from(RoastCollection)
+import PreviousRoasts from "../components/PreviousRoasts.astro";
 
 ---
 <Layout title="Get Roasted">
-	<div class="w-[100vw]">
-		<div class="flex flex-col text-center align-center p-8">
-			<h1 class="text-4xl font-bold">Welcome to the Astro based Roast Generator!</h1>
-			<p>Get ready to roast your friends in various languages! (Using OpenAI)</p>	
-		</div>
 	
-	<h2 class="p-4 text-2xl font-bold">Get Roasted</h2>
-	<Card class="px-8 sm:w-full md:w-[50vw]">
+	<Card class="sm:w-full sm:px-8 md:px-32 lg:px-64">
+		<h2 class="text-3xl font-bold pb-2">Get Roasted</h2>
 		<form id="roast" method="POST" action="/openai">
 			<Input form="roast" name="username" placeholder="Enter your friend's Username" label="Github Username or Organization" helpText="Username or Organization" />
 
-			<Divider />
+			<div class="py-2"></div>
 
 			<Select form="roast" name="language" value="english" label="Language">
 				{
@@ -30,50 +22,36 @@ const previousRoasts = await db.select().from(RoastCollection)
 				}
 			</Select>
 
-			<Divider />
+			<div class="py-2"></div>
 
 			<Button form="roast" variant="primary" size="medium" type="submit"><bold class="font-bold">Roast 'em!</bold></Button>
 		</form>
 	</Card>
 
-	<Divider />
+	<div class="py-2"></div>
 
-	<Card id="roast-result" style="display: none;" class="px-8 sm:w-full md:w-[50vw]">
-		<h2 class="text-xl font-bold">Roast Result</h2>
-		<Divider />
+	<Card id="roast-result" style="display: none;" class="sm:w-full sm:px-8 md:px-32 lg:px-64">
+		<h2 class="text-2xl font-bold">Roast Result</h2>
+		<div class="py-2"></div>
 		<p>Your roast will appear here!</p>
+		<div class="pt-4 text-blue font-bold text-align-right">
+			<a id="roastedurlpath" href="#">Shareable link</a>
+		</div>
 	</Card>
 
-	<Divider class="divider py-2" />
-		{
-			previousRoasts.length > 0 ? (
-				<Card class="px-8 sm:w-full md:w-[50vw]">
-					<h2 class="text-xl font-bold">Previous Roasts</h2>
-					<Divider />
-					{
-						previousRoasts.map((roast) => (
-							<div class="pb-4">
-								<h3 class="text-lg font-bold">{roast.username}</h3> 
-								<p>{roast.response.slice(0, 50)}... <a class="text-blue" href={`/${roast.language}/${roast.username}`}>Read more</a></p>
-							</div>
-						))
-					}
-				</Card>
-			) : (
-				<Card class="px-8 sm:w-full md:w-[50vw]">
-					<h2 class="text-xl font-bold">Previous Roasts</h2>
-					<Divider />
-					<p>No previous roasts found.</p>
-				</Card>
-			)
-		}
-	</div>
+	<div class="py-2"></div>
+
+	<PreviousRoasts />
 
 	<script>
 		const form = document.getElementById('roast') as HTMLFormElement;
 
 		form?.addEventListener('submit', async (event) => {
 			event.preventDefault();
+
+			const formData = new FormData(form);
+			const username = formData.get('username');
+			const language = formData.get('language');
 
 			// Perform the fetch request to the OpenAI API
 			fetch(form.action, {
@@ -88,6 +66,10 @@ const previousRoasts = await db.select().from(RoastCollection)
 				roastResultCard.style.display = 'block';
 				const roastResultText = roastResultCard.querySelector('p') as HTMLParagraphElement;
 				roastResultText.textContent = data.roast;
+
+				// Update the shareable link
+				const roastedUrlPath = document.querySelector('#roastedurlpath') as HTMLAnchorElement;
+				roastedUrlPath.href = `/${language}/${username}`;
 			})
 			.catch(error => {
 				console.error('Error:', error);

@@ -32,16 +32,30 @@ const roastData = await db
 <Layout title={`Roast for ${username}`}>
 
     <div class="w-[100vw] flex align-center justify-center p-4">
-        <Card class="px-8 sm:w-full md:w-[50vw]">
+        <Card class="sm:w-full sm:px-8 md:px-32 lg:px-64">
             <h1 class="text-2xl font-bold">Roast for <a class="text-blue" href={`https://github.com/${username}`}>{username}</a></h1>
 
-            <Divider />
+            <div class="py-2"></div>
 
-            {roastData ? (
-                <p>{roastData.response}</p>
-            ) : (
-                <p>No roast found for {username} in {language}.</p>
-            )}
+            {
+                roastData ? (
+                    <p>{roastData.response}</p>
+                ) : (
+                    <p>No roast found for {username} in {language}.</p>
+                )
+            }
+
+            <div class="flex">
+                <div class="pt-4 text-blue font-bold text-align-left flex-none">
+                    <a href="/" class="inline">Back to the Roaster</a>
+                </div>
+    
+                <div class="w-full"></div>
+
+                <div class="pt-4 text-blue font-bold text-align-right flex-none">
+                    <a href={`/${language}/${username}`}>Shareable link</a>
+                </div>
+            </div>
         </Card>
     </div>
 </Layout>
