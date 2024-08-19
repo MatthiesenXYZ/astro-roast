@@ -1,8 +1,74 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { Card, Input, Select, Option, Divider, Button } from "astrolace:components";
+import { languages } from "../lib/supportedLanguages";
+import { db } from "astro:db";
+import { RoastCollection } from "astro:db";
 
+const previousRoasts = await db.select().from(RoastCollection)
 
 ---
 <Layout title="Get Roasted">
+	<div class="w-[100vw]">
+		<div class="flex flex-col text-center align-center p-8">
+			<h1 class="text-4xl font-bold">Welcome to the Astro based Roast Generator!</h1>
+			<p>Get ready to roast your friends in various languages! (Using OpenAI)</p>	
+		</div>
+	
+	<h2 class="p-4 text-2xl font-bold">Get Roasted</h2>
+	<Card class="w-full px-8">
+		<form method="POST" action="/openai">
+			<Input name="username" placeholder="Enter your friend's Username" label="Github Username or Organization" helpText={"Username or Organization"} />
 
+			<Divider />
+
+			<Select name="language" value={"english"} label="Language">
+				{
+					Object.entries(languages).map(([key, value]) => (
+						<Option value={key}>{value.name}</Option>
+					))
+				}
+			</Select>
+
+			<Divider />
+
+			<Button variant="primary" size="medium">Roast!</Button>
+		</form>
+	</Card>
+
+	<Divider />
+
+	<Card style="display: none;">
+		<h2 class="text-xl font-bold">Roast Result</h2>
+		<Divider />
+		<p>Your roast will appear here!</p>
+	</Card>
+
+	<Divider class="divider py-2" />
+
+	<div class="w-full px-8">
+		{
+			previousRoasts.length > 0 ? (
+				<Card>
+					<h2 class="text-xl font-bold">Previous Roasts</h2>
+					<Divider />
+					{
+						previousRoasts.map((roast) => (
+							<div>
+								<h3><bold>{roast.username}</bold></h3> 
+								<p>{roast.response}</p>
+							</div>
+						))
+					}
+				</Card>
+			) : (
+				<Card>
+					<h2 class="text-xl font-bold">Previous Roasts</h2>
+					<Divider />
+					<p>No previous roasts found.</p>
+				</Card>
+			)
+		}
+	</div>
+	</div>
 </Layout>

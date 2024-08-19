@@ -1,7 +1,9 @@
 import { defineConfig, envField } from 'astro/config';
+import UnoCSS from 'unocss/astro'
 import node from '@astrojs/node';
 import { SITE_URL } from './consts';
 import db from '@astrojs/db';
+import astrolace from '@matthiesenxyz/astrolace';
 
 // https://astro.build/config
 export default defineConfig({
@@ -10,7 +12,15 @@ export default defineConfig({
     adapter: node({
         mode: 'standalone'
     }),
-    integrations: [db()],
+    integrations: [
+        db(),
+        astrolace({
+            verbose: true
+        }),
+        UnoCSS({
+            injectReset: true,
+        }),
+    ],
     experimental: {
         env: {
             schema: {

@@ -161,8 +161,8 @@ export const POST: APIRoute = async ( context: APIContext ): Promise<Response> =
 		try {
 			await db.insert(RoastCollection).values([
 				{
-					username,
-					language,
+					username: username,
+					language: language,
 					response: roast || "",
 					createdAt: new Date(),
 				}
