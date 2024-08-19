@@ -4,6 +4,7 @@ import node from '@astrojs/node';
 import { SITE_URL } from './consts';
 import db from '@astrojs/db';
 import astrolace from '@matthiesenxyz/astrolace';
+import { presetTypography, presetUno, presetWind } from 'unocss';
 
 // https://astro.build/config
 export default defineConfig({
@@ -19,6 +20,11 @@ export default defineConfig({
         }),
         UnoCSS({
             injectReset: true,
+            presets: [
+                presetUno(),
+                presetWind(),
+                presetTypography()
+            ]
         }),
     ],
     experimental: {
