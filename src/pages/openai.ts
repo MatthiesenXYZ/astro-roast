@@ -1,12 +1,12 @@
 import OpenAI from "openai";
-import { OPENAI_APIKEY, GITHUB_APIKEY } from "astro:env/server";
+import { OPENAI_API_KEY, GITHUB_API_KEY } from "astro:env/server";
 import { SITE_DOMAIN } from "../../consts";
 import type { APIContext, APIRoute } from "astro";
 import { languages } from "../lib/supportedLanguages";
 import { and, db, eq, RoastCollection } from "astro:db";
 
 const client = new OpenAI({
-    apiKey: OPENAI_APIKEY
+    apiKey: OPENAI_API_KEY
 });
 
 let headers: Record<string, string> = {
@@ -51,8 +51,8 @@ export const POST: APIRoute = async ( context: APIContext ): Promise<Response> =
 		});
 	}
 
-	if (GITHUB_APIKEY) {
-		headers['Authorization'] = `token ${GITHUB_APIKEY}`;
+	if (GITHUB_API_KEY) {
+		headers['Authorization'] = `token ${GITHUB_API_KEY}`;
 	}
 
 	var profileResponse: {

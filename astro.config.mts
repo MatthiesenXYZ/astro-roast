@@ -24,8 +24,8 @@ export default defineConfig({
     experimental: {
         env: {
             schema: {
-                OPENAI_APIKEY: envField.string({ context: "server", access: "secret" }),
-                GITHUB_APIKEY: envField.string({ context: "server", access: "secret" }),
+                OPENAI_API_KEY: envField.string({ context: "server", access: "secret" }),
+                GITHUB_API_KEY: envField.string({ context: "server", access: "secret" }),
             },
         },
     }
