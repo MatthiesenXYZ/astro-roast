@@ -1,9 +1,11 @@
 import OpenAI from "openai";
 import { OPENAI_API_KEY, GITHUB_API_KEY } from "astro:env/server";
-import { SITE_DOMAIN } from "../../consts";
+import { OPENAI_SETTINGS, SITE_DOMAIN } from "../../consts";
 import type { APIContext, APIRoute } from "astro";
 import { languages } from "../lib/supportedLanguages";
 import { and, db, eq, RoastCollection } from "astro:db";
+
+const { OPENAI_MODEL, OPENAI_STREAM, OPENAI_SYS_PROMPT } = OPENAI_SETTINGS;
 
 const client = new OpenAI({
     apiKey: OPENAI_API_KEY
@@ -144,14 +146,10 @@ export const POST: APIRoute = async ( context: APIContext ): Promise<Response> =
 
 	try {
 		const completion = await client.chat.completions.create({
-			model: 'gpt-4o-mini',
+			model: OPENAI_MODEL,
 			stream: false,
 			messages: [
-				{
-					role: 'system',
-					content:
-						'You roast people github account based on their bio, name, readme, and repos as harsh and spicy as possible, and keep it short.'
-				},
+				{ role: 'system', content: OPENAI_SYS_PROMPT },
 				{ role: 'user', content: prompt }
 			]
 		});

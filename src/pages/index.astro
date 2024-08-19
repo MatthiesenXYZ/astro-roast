@@ -16,7 +16,7 @@ const previousRoasts = await db.select().from(RoastCollection)
 		</div>
 	
 	<h2 class="p-4 text-2xl font-bold">Get Roasted</h2>
-	<Card class="w-full px-8">
+	<Card class="px-8 sm:w-full md:w-[50vw]">
 		<form id="roast" method="POST" action="/openai">
 			<Input form="roast" name="username" placeholder="Enter your friend's Username" label="Github Username or Organization" helpText="Username or Organization" />
 
@@ -38,38 +38,35 @@ const previousRoasts = await db.select().from(RoastCollection)
 
 	<Divider />
 
-	<Card id="roast-result" style="display: none;">
+	<Card id="roast-result" style="display: none;" class="px-8 sm:w-full md:w-[50vw]">
 		<h2 class="text-xl font-bold">Roast Result</h2>
 		<Divider />
 		<p>Your roast will appear here!</p>
 	</Card>
 
 	<Divider class="divider py-2" />
-
-	<div class="w-full px-8">
 		{
 			previousRoasts.length > 0 ? (
-				<Card>
+				<Card class="px-8 sm:w-full md:w-[50vw]">
 					<h2 class="text-xl font-bold">Previous Roasts</h2>
 					<Divider />
 					{
 						previousRoasts.map((roast) => (
-							<div>
+							<div class="pb-4">
 								<h3 class="text-lg font-bold">{roast.username}</h3> 
-								<p>{roast.response.slice(0, 25)}... <a href={`/${roast.language}/${roast.username}`}>Read more...</a></p>
+								<p>{roast.response.slice(0, 50)}... <a class="text-blue" href={`/${roast.language}/${roast.username}`}>Read more</a></p>
 							</div>
 						))
 					}
 				</Card>
 			) : (
-				<Card>
+				<Card class="px-8 sm:w-full md:w-[50vw]">
 					<h2 class="text-xl font-bold">Previous Roasts</h2>
 					<Divider />
 					<p>No previous roasts found.</p>
 				</Card>
 			)
 		}
-	</div>
 	</div>
 
 	<script>

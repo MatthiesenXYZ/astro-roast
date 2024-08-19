@@ -5,6 +5,7 @@ import { RoastCollection } from "astro:db";
 import { eq } from "astro:db";
 import Layout from "../../layouts/Layout.astro";
 import { and } from "astro:db";
+import { Card, Divider } from "astrolace:components";
 
 
 const { language, username } = Astro.params;
@@ -30,10 +31,17 @@ const roastData = await db
 
 <Layout title={`Roast for ${username}`}>
 
-    <h1>Roast for {username}</h1>
-    {roastData ? (
-        <p>{roastData.response}</p>
-    ) : (
-        <p>No roast found for {username} in {language}.</p>
-    )}
+    <div class="w-[100vw] flex align-center justify-center p-4">
+        <Card class="px-8 sm:w-full md:w-[50vw]">
+            <h1 class="text-2xl font-bold">Roast for <a class="text-blue" href={`https://github.com/${username}`}>{username}</a></h1>
+
+            <Divider />
+
+            {roastData ? (
+                <p>{roastData.response}</p>
+            ) : (
+                <p>No roast found for {username} in {language}.</p>
+            )}
+        </Card>
+    </div>
 </Layout>
