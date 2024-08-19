@@ -9,7 +9,6 @@ interface Props {
 
 const { username, language } = Astro.props;
 
-
 if ( languages[language] === undefined || languages[language] === null ) {
     throw new Error(`Language "${language}" is not yet supported.`);
 }
@@ -29,7 +28,29 @@ if (!roastData) {
 
 let { username: name, response: roast } = roastData;
 ---
+<div style="display: flex; flex-direction: column; justify-items: center; align-items: center; background-color: #1c1c1c; font-family: Inter; height: 100%;">
 
-<h1>{name}</h1>
+    <div style="display: flex; flex-direction: column; justify-items: center; align-items: center;">
+        <h1 style="font-size: 4rem; line-height: 4rem; color: #dcdcdc; text-shadow: 4px 4px 10px black;">
+            Welcome to the Astro based Roast Generator!
+        </h1>
+        <p style="font-size: 1.5rem; line-height: 1rem; color: #dcdcdc; text-shadow: 4px 4px 10px black;">Get ready to roast your friends in various languages! (Using OpenAI)</p>	
+    </div>
 
-<p>{roast}</p>
+    <div style="display: flex; flex-direction: row; justify-items: center; align-items: center; padding-top: 2rem; padding-bottom: 0;">
+        <div style="display: flex; flex-direction: column; justify-items: center; align-items: center; padding-right: 1rem;">
+
+            <div style="display: flex; flex-direction: column; justify-items: center; align-items: center; padding-top: 0.5rem; padding-bottom: 0.5rem; background-color: #04001f; border-color: #454545; border-width: 3px; padding: 1rem; width: 90vw; box-shadow: 1px 1px 20px black;">
+                <h2 style="font-size: 4rem; line-height: 5rem; color: #0073ff; text-shadow: 4px 4px 10px black;">
+                    {name}
+                </h2>
+                <div style="display: flex; flex-direction: column; justify-items: center; align-items: center;">
+                    <p style="font-size: 2rem; line-height: 2.5rem; color: #cacaca; text-shadow: 4px 4px 10px black;">
+                        {roast}
+                    </p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>

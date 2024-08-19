@@ -29,7 +29,7 @@ const roastData = await db
 
 ---
 
-<Layout title={`Roast for ${username}`}>
+<Layout title={`Roast for ${username}`} description={username + " Roasted"} ogImage={`${language}/${username}`}>
 
     <div class="w-[100vw] flex align-center justify-center p-4">
         <Card class="sm:w-full sm:px-8 md:px-32 lg:px-64">
