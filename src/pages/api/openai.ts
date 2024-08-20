@@ -3,7 +3,8 @@ import { OPENAI_API_KEY, GITHUB_API_KEY } from "astro:env/server";
 import { OPENAI_SETTINGS, SITE_DOMAIN } from "../../../consts";
 import type { APIContext, APIRoute } from "astro";
 import { languages } from "../../lib/supportedLanguages";
-import { and, db, eq, RoastCollection } from "astro:db";
+import { db, RoastCollection } from "astro:db";
+import { getRoasts } from "../../lib/roastCollection";
 
 const { OPENAI_MODEL, OPENAI_SYS_PROMPT } = OPENAI_SETTINGS;
 
@@ -37,14 +38,7 @@ export const POST: APIRoute = async ( context: APIContext ): Promise<Response> =
 		});
 	}
 
-	const existingRoastInCurrentLanguage = await db
-		.select()
-		.from(RoastCollection)
-		.where(and(
-			eq(RoastCollection.username, username),
-			eq(RoastCollection.language, language)
-		))
-		.get();
+	const existingRoastInCurrentLanguage = await (await getRoasts()).roastSelect(username, language)
 
 	if (existingRoastInCurrentLanguage) {
 		return new Response(JSON.stringify({ roast: existingRoastInCurrentLanguage.response }), {

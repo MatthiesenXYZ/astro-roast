@@ -3,22 +3,16 @@ import Layout from "../layouts/Layout.astro";
 import { Card, Input, Select, Option, Button } from "astrolace:components";
 import { languages } from "../lib/supportedLanguages";
 import PreviousRoasts from "../components/PreviousRoasts.astro";
-import { db, RoastCollection } from "astro:db";
+import { getRoasts, makeDescription, getOgImagePath } from "../lib/roastCollection";
 
+const roast = (await getRoasts()).lastRoast;
 
-const previousRoasts = await db.select().from(RoastCollection)
-
-previousRoasts.sort(({ createdAt: start }, { createdAt: end }) => new Date(end).getTime() - new Date(start).getTime());
-
-const firstRoast = previousRoasts.length > 0 ? previousRoasts[0] : null;
-
-let descriptionRoast = firstRoast ? ` - Showing last user roasted: ${firstRoast.username} in ${firstRoast.language}` : '';
-
-let ogImage = firstRoast ? `${firstRoast.language}/${firstRoast.username}` : '';
+const description = makeDescription(roast);
+const ogImage = getOgImagePath(roast);
 ---
 <Layout 
 	title="Get Roasted" 
-	description={`Get Roasted${descriptionRoast}`} 
+	description={description} 
 	ogImage={ogImage}
 	>
 	

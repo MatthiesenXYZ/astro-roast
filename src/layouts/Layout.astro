@@ -13,7 +13,7 @@ const canonical = new URL(Astro.url.pathname, Astro.url.origin).href;
 
 const CurrentTimeStamp = (new Date().getTime() / 1000).toFixed(0)
 
-const ogImageURL = `${Astro.site}${ogImage}.png?v=${CurrentTimeStamp}`;
+const ogImageURL = `${Astro.site}${ogImage}?v=${CurrentTimeStamp}`;
 ---
 
 <html lang="en" class="sl-theme-dark">

@@ -1,11 +1,8 @@
 ---
 import { Card } from "astrolace:components";
-import { db } from "astro:db";
-import { RoastCollection } from "astro:db";
+import { getRoasts } from "../lib/roastCollection";
 
-const previousRoasts = await db.select().from(RoastCollection)
-
-previousRoasts.sort(({ createdAt: start }, { createdAt: end }) => new Date(end).getTime() - new Date(start).getTime());
+const previousRoasts = (await getRoasts()).last15Roasts;
 ---
 
 {
@@ -14,7 +11,7 @@ previousRoasts.sort(({ createdAt: start }, { createdAt: end }) => new Date(end).
             <h2 class="text-2xl font-bold">Previous 15 Roasts</h2>
             <div class="py-2 divider"></div>
             {
-                previousRoasts.slice(0, 14).map((roast) => (
+                previousRoasts.map((roast) => (
                     <div class="pb-4">
                         <h3 class="text-lg font-bold">{roast.username}</h3> 
                         <p>{roast.response.slice(0, 100)}... <a class="text-blue" href={`/${roast.language}/${roast.username}`}>Read more</a></p>

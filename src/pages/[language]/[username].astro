@@ -1,11 +1,8 @@
 ---
-import { db } from "astro:db";
 import { languages } from "../../lib/supportedLanguages";
-import { RoastCollection } from "astro:db";
-import { eq } from "astro:db";
 import Layout from "../../layouts/Layout.astro";
-import { and } from "astro:db";
 import { Card } from "astrolace:components";
+import { getOgImagePath, getRoasts, makeDescription } from "../../lib/roastCollection";
 
 
 const { language, username } = Astro.params;
@@ -18,21 +15,17 @@ if ( languages[language] === undefined || languages[language] === null ) {
     throw new Error(`Language "${language}" is not yet supported.`);
 }
 
-const roastData = await db
-    .select()
-    .from(RoastCollection)
-    .where(and(
-        eq(RoastCollection.username, username), 
-        eq(RoastCollection.language, language)
-    ))
-    .get();
+const roastData = await (await getRoasts()).roastSelect(username, language)
+
+const description = makeDescription(roastData);
+const ogImage = getOgImagePath(roastData);
 
 ---
 
 <Layout 
     title={`Roast for ${username}`} 
-    description={username + " Roasted"} 
-    ogImage={`${language}/${username}`}
+    description={description} 
+    ogImage={ogImage}
     >
 
     <div class="w-[100vw] flex align-center justify-center p-4">

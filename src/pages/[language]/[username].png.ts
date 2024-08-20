@@ -5,6 +5,10 @@ import { satoriAstroOG } from "../../lib/satoriOG";
 import { html } from "satori-html";
 import { decode } from 'html-entities';
 import { languages } from "../../lib/supportedLanguages";
+import { FONTS } from '../../../consts';
+import { getPublicFonts } from "../../lib/utils";
+
+const { OG_IMAGE } = FONTS;
 
 export const GET: APIRoute = async ( context: APIContext ): Promise<Response> => {
 
@@ -25,20 +29,20 @@ export const GET: APIRoute = async ( context: APIContext ): Promise<Response> =>
     }
     
     if ( languages[language] === undefined || languages[language] === null ) {
-        throw new Error(`Language "${language}" is not yet supported.`);
+        return new Response(JSON.stringify({ error: `Language "${language}" is not yet supported.` }), {
+            status: 400,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
     }
-
-    // Create the html template for the image
-    const OGImageTemplateContainer = await astroContainer.renderToString(OGImageTemplate, { props: { username, language } });
-
-    const poppinsNormalFile = await fetch(new URL("/fonts/poppins-regular.ttf", context.url.origin))
-    const poppinsNormalData = await poppinsNormalFile.arrayBuffer();
-    const poppinsBoldFile = await fetch(new URL("/fonts/poppins-bold.ttf", context.url.origin))
-    const poppinsBoldData = await poppinsBoldFile.arrayBuffer();
 
     // Generate the image using Satori
     return await satoriAstroOG({
-        template: html(decode(OGImageTemplateContainer)),
+        template: html(
+            decode(await (astroContainer).renderToString(
+                OGImageTemplate, { props: { username, language } }
+            ))),
         width: 1920,
         height: 1080,
     })
@@ -47,13 +51,13 @@ export const GET: APIRoute = async ( context: APIContext ): Promise<Response> =>
             fonts: [
                 {
                     name: 'Poppins',
-                    data: poppinsNormalData,
+                    data: await getPublicFonts(context.url.origin, OG_IMAGE.NORMAL),
                     style: 'normal',
                     weight: 400,
                 },
                 {
                     name: 'Poppins',
-                    data: poppinsBoldData,
+                    data: await getPublicFonts(context.url.origin, OG_IMAGE.BOLD),
                     style: 'normal',
                     weight: 700,
                 },

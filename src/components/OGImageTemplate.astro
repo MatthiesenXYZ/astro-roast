@@ -1,6 +1,7 @@
 ---
 import { and, db, eq, RoastCollection } from 'astro:db';
 import { languages } from '../lib/supportedLanguages';
+import { getRoasts } from '../lib/roastCollection';
 
 interface Props {
     username: string;
@@ -13,14 +14,7 @@ if ( languages[language] === undefined || languages[language] === null ) {
     throw new Error(`Language "${language}" is not yet supported.`);
 }
 
-const roastData = await db
-    .select()
-    .from(RoastCollection)
-    .where(and(
-        eq(RoastCollection.username, username), 
-        eq(RoastCollection.language, language)
-    ))
-    .get();
+const roastData = await (await getRoasts()).roastSelect(username, language)
 
 if (!roastData) {
     throw new Error(`No roast found for ${username} in ${language}.`);

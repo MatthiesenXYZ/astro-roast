@@ -8,7 +8,7 @@ export const languages: Record<string, { name: string; buildPrompt: (username: s
     spanish: {
         name: "Español (Spanish)",
         buildPrompt(username, data) {
-            return `haz una crítica breve y dura para el siguiente perfil de github: ${username}. Aquí están los detalles: "${JSON.stringify(data)}"`;
+            return `dar una crítica breve y dura del siguiente perfil de github: ${username}. Aquí están los detalles: "${JSON.stringify(data)}"`;
         }
     },
 	france: {
