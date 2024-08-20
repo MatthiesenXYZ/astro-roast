@@ -30,8 +30,11 @@ export const GET: APIRoute = async ( context: APIContext ): Promise<Response> =>
 
     // Create the html template for the image
     const OGImageTemplateContainer = await astroContainer.renderToString(OGImageTemplate, { props: { username, language } });
-    const fontFile = await fetch(new URL("/fonts/inter-latin-ext-700-normal.woff", context.url.origin))
-    const fontData = await fontFile.arrayBuffer();
+
+    const poppinsNormalFile = await fetch(new URL("/fonts/poppins-regular.ttf", context.url.origin))
+    const poppinsNormalData = await poppinsNormalFile.arrayBuffer();
+    const poppinsBoldFile = await fetch(new URL("/fonts/poppins-bold.ttf", context.url.origin))
+    const poppinsBoldData = await poppinsBoldFile.arrayBuffer();
 
     // Generate the image using Satori
     return await satoriAstroOG({
@@ -43,9 +46,16 @@ export const GET: APIRoute = async ( context: APIContext ): Promise<Response> =>
         satori: {
             fonts: [
                 {
-                    name: 'Inter',
-                    data: fontData,
+                    name: 'Poppins',
+                    data: poppinsNormalData,
                     style: 'normal',
+                    weight: 400,
+                },
+                {
+                    name: 'Poppins',
+                    data: poppinsBoldData,
+                    style: 'normal',
+                    weight: 700,
                 },
             ],
         },

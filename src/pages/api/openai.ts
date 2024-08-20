@@ -1,8 +1,8 @@
 import OpenAI from "openai";
 import { OPENAI_API_KEY, GITHUB_API_KEY } from "astro:env/server";
-import { OPENAI_SETTINGS, SITE_DOMAIN } from "../../consts";
+import { OPENAI_SETTINGS, SITE_DOMAIN } from "../../../consts";
 import type { APIContext, APIRoute } from "astro";
-import { languages } from "../lib/supportedLanguages";
+import { languages } from "../../lib/supportedLanguages";
 import { and, db, eq, RoastCollection } from "astro:db";
 
 const { OPENAI_MODEL, OPENAI_SYS_PROMPT } = OPENAI_SETTINGS;

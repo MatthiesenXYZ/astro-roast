@@ -12,14 +12,30 @@ previousRoasts.sort(({ createdAt: start }, { createdAt: end }) => new Date(end).
 
 const firstRoast = previousRoasts.length > 0 ? previousRoasts[0] : null;
 
+let descriptionRoast = firstRoast ? ` - Showing last user roasted: ${firstRoast.username} in ${firstRoast.language}` : '';
+
 let ogImage = firstRoast ? `${firstRoast.language}/${firstRoast.username}` : '';
 ---
-<Layout title="Get Roasted" description={`Get Roasted - Showing last user roasted: ${firstRoast ? firstRoast.username : "Not Available"} in ${firstRoast ? firstRoast.language : "Not Available"}`} ogImage={ogImage}>
+<Layout 
+	title="Get Roasted" 
+	description={`Get Roasted${descriptionRoast}`} 
+	ogImage={ogImage}
+	>
 	
 	<Card class="sm:w-full sm:px-8 md:px-32 lg:px-64">
+
 		<h2 class="text-3xl font-bold pb-2">Get Roasted</h2>
-		<form id="roast" method="POST" action="/openai">
-			<Input form="roast" name="username" placeholder="Enter your friend's Username" label="Github Username or Organization" helpText="Username or Organization" />
+
+		<div class="divider"></div>
+
+		<form id="roast" method="POST" action="/api/openai">
+			<Input 
+				form="roast" 
+				name="username" 
+				placeholder="Enter your friend's Username" 
+				label="Github Username or Organization" 
+				helpText="Username or Organization" 
+				/>
 
 			<div class="py-2"></div>
 
@@ -33,30 +49,51 @@ let ogImage = firstRoast ? `${firstRoast.language}/${firstRoast.username}` : '';
 
 			<div class="py-2"></div>
 
-			<Button form="roast" variant="primary" size="medium" type="submit"><bold class="font-bold">Roast 'em!</bold></Button>
+			<Button 
+				form="roast" 
+				id="roastbutton" 
+				variant="primary" 
+				size="medium" 
+				type="submit"
+				class="font-bold"
+				>Roast 'em!
+			</Button>
 		</form>
 	</Card>
 
 	<div class="py-2"></div>
 
 	<Card id="roast-result" style="display: none;" class="sm:w-full sm:px-8 md:px-32 lg:px-64">
+		
 		<h2 class="text-2xl font-bold">Roast Result</h2>
-		<div class="py-2"></div>
+
+        <div class="py-2 divider"></div>
+		
 		<p style="white-space: pre-line;">Your roast will appear here!</p>
+		
 		<div class="pt-4 text-blue font-bold text-align-right">
 			<a id="roastedurlpath" href="#">Shareable link</a>
 		</div>
+
 	</Card>
 
 	<div class="py-2"></div>
 
 	<PreviousRoasts />
-
+	
 	<script>
+	import type { SlButton } from "astrolace:types";
+	import JSConfetti from 'js-confetti'
+	
 		const form = document.getElementById('roast') as HTMLFormElement;
+		const roastButton = document.getElementById('roastbutton') as SlButton;
 
 		form?.addEventListener('submit', async (event) => {
 			event.preventDefault();
+
+			const jsConfetti = new JSConfetti()
+			roastButton.loading = true;
+			roastButton.disabled = true;
 
 			const formData = new FormData(form);
 			const username = formData.get('username');
@@ -79,9 +116,16 @@ let ogImage = firstRoast ? `${firstRoast.language}/${firstRoast.username}` : '';
 				// Update the shareable link
 				const roastedUrlPath = document.querySelector('#roastedurlpath') as HTMLAnchorElement;
 				roastedUrlPath.href = `/${language}/${username}`;
+				roastButton.loading = false;
+				roastButton.disabled = false;
+
+				// Trigger confetti animation
+				jsConfetti.addConfetti()
 			})
 			.catch(error => {
 				console.error('Error:', error);
+				roastButton.loading = false;
+				roastButton.disabled = false;
 			});
 		});
 	</script>

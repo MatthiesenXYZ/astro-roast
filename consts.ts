@@ -1,5 +1,5 @@
-export const SITE_URL: string = 'http://localhost:4321';
-export const SITE_DOMAIN: string = 'localhost';
+export const SITE_URL: string = 'https://astroaster.xyz';
+export const SITE_DOMAIN: string = 'astroaster.xyz';
 export const OPENAI_SETTINGS: {
     OPENAI_MODEL: string;
     OPENAI_SYS_PROMPT: string;

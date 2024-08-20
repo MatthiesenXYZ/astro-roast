@@ -4,7 +4,8 @@ import node from '@astrojs/node';
 import { SITE_URL } from './consts';
 import db from '@astrojs/db';
 import astrolace from '@matthiesenxyz/astrolace';
-import { presetTypography, presetUno, presetWind } from 'unocss';
+import { presetTypography, presetUno, presetWebFonts, presetWind } from 'unocss';
+import { presetDaisy } from '@matthiesenxyz/unocss-preset-daisyui';
 
 // https://astro.build/config
 export default defineConfig({
@@ -23,7 +24,21 @@ export default defineConfig({
             presets: [
                 presetUno(),
                 presetWind(),
-                presetTypography()
+                presetTypography(),
+                presetDaisy({
+                    themes: ['dark'],
+                }),
+                presetWebFonts({
+                    provider: 'google',
+                    fonts: {
+                        sans: [
+                            {
+                                name: 'Poppins',
+                                weights: ['400', '700'],
+                            },
+                        ],
+                    }
+                })
             ]
         }),
     ],
