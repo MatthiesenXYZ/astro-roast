@@ -1,4 +1,5 @@
 ---
+import { toPascalCase } from '@matthiesenxyz/integration-utils';
 import RoastsByLanguage from '../../components/RoastsByLanguage.astro';
 import Layout from '../../layouts/Layout.astro';
 import { getOgImagePath, getRoasts, makeDescription } from '../../lib/roastCollection';
@@ -20,7 +21,7 @@ const description = makeDescription(roastData);
 const ogImage = getOgImagePath(roastData);
 ---
 
-<Layout title={`Roasts (${language})`} {description} {ogImage}>
+<Layout title={`Roasts (${toPascalCase(language)})`} {description} {ogImage}>
 
     <RoastsByLanguage {language} />
 

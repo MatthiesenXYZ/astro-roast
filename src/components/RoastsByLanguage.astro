@@ -22,7 +22,7 @@ const previousRoasts = await (await getRoasts()).byLanguage(language);
     { previousRoasts.length > 0 ? previousRoasts.map((roast) => (
         <div class="pb-4">
 
-            <h3 class="text-lg font-bold text-accent">{roast.username}</h3> 
+            <h3 class="text-lg font-bold text-accent">{toPascalCase(roast.username)}</h3> 
             
             <div class="flex flex-row">
                 <p class="line-clamp-1">{roast.response}</p>

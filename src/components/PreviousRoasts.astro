@@ -1,5 +1,6 @@
 ---
 import { Card, Icon } from 'astrolace:components';
+import { toPascalCase } from '@matthiesenxyz/integration-utils';
 import { getRoastPath, getRoasts } from '../lib/roastCollection';
 import { getSvg } from '../lib/svgMap';
 
@@ -15,7 +16,7 @@ const previousRoasts = (await getRoasts()).last15Roasts;
     { previousRoasts.length > 0 ? previousRoasts.map((roast) => (
         <div class="pb-4">
 
-            <h3 class="text-lg font-bold text-accent">{roast.username}</h3> 
+            <h3 class="text-lg font-bold text-accent">{toPascalCase(roast.username)}</h3> 
 
             <div class="flex flex-row">
                 <p class="line-clamp-1">{roast.response}</p>

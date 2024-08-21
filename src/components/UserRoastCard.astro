@@ -1,5 +1,6 @@
 ---
 import { Card, Icon } from 'astrolace:components';
+import { toPascalCase } from '@matthiesenxyz/integration-utils';
 import { getOgImagePath, getRoastPath } from '../lib/roastCollection';
 import { getSvg } from '../lib/svgMap';
 
@@ -19,7 +20,7 @@ interface Props {
 const { username, language, roastData } = Astro.props;
 ---
 <Card class="web-frame">
-    <h1 class="flex align-center items-center gap-2 text-2xl font-bold text-secondary text-shadow-lg">Roast for <a class="text-accent text-shadow-lg" href={`https://github.com/${username}`}>{username}</a> <Icon src={getSvg("fire")} /></h1>
+    <h1 class="flex align-center items-center gap-2 text-2xl font-bold text-secondary text-shadow-lg">Roast for <a class="text-accent text-shadow-lg" href={`https://github.com/${username}`}>{toPascalCase(username)}</a> <Icon src={getSvg("fire")} /></h1>
 
     <div class="py-2 divider"></div>
 
