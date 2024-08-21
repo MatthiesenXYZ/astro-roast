@@ -1,0 +1,15 @@
+---
+import Footer from './Footer.astro';
+import Header from './Header.astro';
+---
+<body class="overflow-x-hidden font-sans">
+	<div class="w-[100vw] flex flex-col">
+
+		<Header />
+
+		<slot />
+
+		<Footer />
+
+	</div>
+</body>

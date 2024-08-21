@@ -1,14 +1,21 @@
 ---
 import { Card, Icon } from 'astrolace:components';
+import { toPascalCase } from '@matthiesenxyz/integration-utils';
 import { getRoastPath, getRoasts } from '../lib/roastCollection';
 import { getSvg } from '../lib/svgMap';
 
-// Fetch the last 15 roasts
-const previousRoasts = (await getRoasts()).last15Roasts;
+interface Props {
+	language: string;
+}
+
+const { language } = Astro.props;
+
+// Fetch the previous roasts for the given language
+const previousRoasts = await (await getRoasts()).byLanguage(language);
 ---
 
 <Card class="web-frame">
-    <h2 class="text-2xl font-bold text-secondary text-shadow-lg">Previous 15 Roasts</h2>
+    <h2 class="text-2xl font-bold text-secondary text-shadow-lg">Roasts <span class="text-accent">({toPascalCase(language)})</span></h2>
     
     <div class="py-2 divider"></div>
             
@@ -16,16 +23,16 @@ const previousRoasts = (await getRoasts()).last15Roasts;
         <div class="pb-4">
 
             <h3 class="text-lg font-bold text-accent">{roast.username}</h3> 
-
+            
             <div class="flex flex-row">
                 <p class="line-clamp-1">{roast.response}</p>
                 <a class="flex-none text-blue text-align-right inline flex align-center items-center gap-2 " href={getRoastPath(roast)}>Read more <Icon src={getSvg('forward')} /></a>
             </div>
-
+            
         </div>
-    )) : (
-        <h2 class="text-xl font-bold text-secondary text-shadow-lg">Previous 15 Roasts</h2>
+    )): (
+        <h2 class="text-xl font-bold text-secondary text-shadow-lg">Roasts <span class="text-accent">({toPascalCase(language)})</span></h2>
         <div class="py-2"></div>
-        <p>No previous roasts found.</p>
+        <p>No roasts found.</p>
     )}
 </Card>

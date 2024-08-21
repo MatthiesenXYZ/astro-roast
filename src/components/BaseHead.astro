@@ -10,27 +10,32 @@ interface Props {
 const { title, description, canonical, ogImageURL } = Astro.props;
 ---
 
-<!-- Meta Tags -->
-<meta charset="utf-8" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=009" />
-<meta name="viewport" content="width=device-width" />
-<meta name="generator" content={Astro.generator} />
-<title>Astro Roaster { title && `🔥 ${title}`}</title>
+<head>
+	<!-- Meta Tags -->
+	<meta charset="utf-8" />
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	<meta name="viewport" content="width=device-width" />
+	<meta name="generator" content={Astro.generator} />
+	<title>Astro Roaster { title && `🔥 ${title}`}</title>
+	
+	<!-- Open Graph Meta Tags -->
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content={canonical} />
+	<meta property="og:title" content={`Astro Roaster ${ title && `🔥 ${title}`}`} />
+	<meta property="og:description" content={description} />
+	<meta property="og:image" content={ogImageURL} />
+	<meta property="og:site_name" content={`Astro Roaster ${ title && `🔥 ${title}`}`} />
+	<meta property="og:locale" content="en_US" />
+	<meta property="og:image:width" content="1920" />
+	<meta property="og:image:height" content="1080" />
+	
+	<!-- Twitter Meta Tags -->
+	<meta property="twitter:card" content="summary_large_image" />
+	<meta property="twitter:url" content={canonical} />
+	<meta property="twitter:title" content={`Astro Roaster ${ title && `🔥 ${title}`}`} />
+	<meta property="twitter:description" content={description} />
+	<meta property="twitter:image" content={ogImageURL} />
 
-<!-- Open Graph Meta Tags -->
-<meta property="og:type" content="website" />
-<meta property="og:url" content={canonical} />
-<meta property="og:title" content={`Astro Roaster ${ title && `🔥 ${title}`}`} />
-<meta property="og:description" content={description} />
-<meta property="og:image" content={ogImageURL} />
-<meta property="og:site_name" content={`Astro Roaster ${ title && `🔥 ${title}`}`} />
-<meta property="og:locale" content="en_US" />
-<meta property="og:image:width" content="1920" />
-<meta property="og:image:height" content="1080" />
+	<slot />
 
-<!-- Twitter Meta Tags -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={canonical} />
-<meta property="twitter:title" content={`Astro Roaster ${ title && `🔥 ${title}`}`} />
-<meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={ogImageURL} />
+</head>

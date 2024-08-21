@@ -24,8 +24,8 @@ import { getSvg } from '../lib/svgMap';
         <div class="flex text-accent font-bold items-center align-center gap-1 pb-1"><Icon src={getSvg("globe")} />Language</div>
 		<Select form="roast" name="language" value="english">
 			{
-				Object.entries(languages).map(([key, value]) => (
-					<Option value={key}>{value.name}</Option>
+				Object.entries(languages).map(([key, { name }]) => (
+					<Option value={key}>{name}</Option>
 				))
 			}
 		</Select>

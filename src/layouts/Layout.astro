@@ -1,8 +1,7 @@
 ---
 import { ShoelaceHeader } from 'astrolace:components/header';
+import BaseBody from '../components/BaseBody.astro';
 import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
 
 interface Props {
 	title?: string;
@@ -24,24 +23,17 @@ const ogImageURL = `${Astro.site}${ogImage}?v=${CurrentTimeStamp}`;
 ---
 
 <html lang="en" class="sl-theme-dark">
-	<head>
-		<BaseHead 
-			title={title} 
-			description={description} 
-			canonical={canonical} 
-			ogImageURL={ogImageURL} 
-			/>
-        <ShoelaceHeader />
-	</head>
-	<body class="overflow-x-hidden font-sans">
-		<div class="w-[100vw] flex flex-col">
 
-			<Header />
+	<BaseHead {title} {description} {canonical} {ogImageURL}>
+        
+		<ShoelaceHeader />
 
-			<slot />
+	</BaseHead>
 
-			<Footer />
+	<BaseBody>
 
-		</div>
-	</body>
+		<slot />
+		
+	</BaseBody>
+
 </html>

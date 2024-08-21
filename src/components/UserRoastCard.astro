@@ -23,13 +23,11 @@ const { username, language, roastData } = Astro.props;
 
     <div class="py-2 divider"></div>
 
-    {
-        roastData ? (
-            <div style="white-space: pre-line;">{roastData.response}</div>
-        ) : (
-            <p>No roast found for {username} in {language}.</p>
-        )
-    }
+    { roastData ? (
+        <div style="white-space: pre-line;">{roastData.response}</div>
+    ) : (
+        <p>No roast found for {username} in {language}.</p>
+    )}
 
     <div class="py-2 divider"></div>
 

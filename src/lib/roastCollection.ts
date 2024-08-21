@@ -12,7 +12,23 @@ const sorted = previousRoasts.sort(
 const latestRoasts = sorted.slice(0, 15);
 
 // Get the last roast
-const lastRoast = latestRoasts.length > 0 ? latestRoasts[0] : undefined;
+const lastRoast = sorted[0];
+
+// Get the Previous Roasts by language
+const roastsByLanguage = async (language: string) => {
+	return (
+		await db.select().from(RoastCollection).where(eq(RoastCollection.language, language))
+	).sort(
+		({ createdAt: start }, { createdAt: end }) =>
+			new Date(end).getTime() - new Date(start).getTime()
+	);
+};
+
+// Get the last roast by language
+const lastRoastByLanguage = async (language: string) => {
+	const roasts = await roastsByLanguage(language);
+	return roasts[0];
+};
 
 // Function to get roasts
 export const getRoasts = async () => {
@@ -26,6 +42,12 @@ export const getRoasts = async () => {
 				.from(RoastCollection)
 				.where(and(eq(RoastCollection.username, username), eq(RoastCollection.language, language)))
 				.get();
+		},
+		byLanguage(language: string) {
+			return roastsByLanguage(language);
+		},
+		lastByLanguage(language: string) {
+			return lastRoastByLanguage(language);
 		},
 	};
 };

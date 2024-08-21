@@ -12,7 +12,7 @@ const roast = (await getRoasts()).lastRoast;
 const description = makeDescription(roast);
 const ogImage = getOgImagePath(roast);
 ---
-<Layout title="Get Roasted" description={description} ogImage={ogImage}>
+<Layout title="Get Roasted" {description} {ogImage}>
 
 	<Roaster />
 	

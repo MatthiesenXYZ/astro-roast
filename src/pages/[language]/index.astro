@@ -1,32 +1,27 @@
 ---
-import UserRoastCard from '../../components/UserRoastCard.astro';
+import RoastsByLanguage from '../../components/RoastsByLanguage.astro';
 import Layout from '../../layouts/Layout.astro';
 import { getOgImagePath, getRoasts, makeDescription } from '../../lib/roastCollection';
 import { languages } from '../../lib/supportedLanguages';
 
 // Get the language and username from the URL parameters
-const { language, username } = Astro.params;
-
-// Validate the language and username
-if (!language || !username) {
-	throw new Error('Language and username are required.');
-}
+const { language } = Astro.params;
 
 // Check if the language is supported
-if (languages[language] === undefined || languages[language] === null) {
+if (!language || languages[language] === undefined || languages[language] === null) {
 	throw new Error(`Language "${language}" is invalid or not yet supported.`);
 }
 
 // Fetch the roast data
-const roastData = await (await getRoasts()).roastSelect(username, language);
+const roastData = await (await getRoasts()).lastByLanguage(language);
 
 // Generate description and OG image path
 const description = makeDescription(roastData);
 const ogImage = getOgImagePath(roastData);
 ---
 
-<Layout title={`Roast for ${username}`} {description} {ogImage}>
+<Layout title={`Roasts (${language})`} {description} {ogImage}>
 
-    <UserRoastCard {username} {language} {roastData} />
+    <RoastsByLanguage {language} />
 
 </Layout>
