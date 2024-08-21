@@ -1,5 +1,4 @@
 ---
-import { toPascalCase } from '@matthiesenxyz/integration-utils';
 import UserRoastCard from '../../components/UserRoastCard.astro';
 import Layout from '../../layouts/Layout.astro';
 import { getOgImagePath, getRoasts, makeDescription } from '../../lib/roastCollection';
@@ -26,8 +25,8 @@ const description = makeDescription(roastData);
 const ogImage = getOgImagePath(roastData);
 ---
 
-<Layout title={`Roast for ${toPascalCase(username)}`} {description} {ogImage}>
+<Layout title={`Roast for ${username}`} {description} {ogImage}>
 
-    <UserRoastCard username={toPascalCase(username)} {language} {roastData} />
+    <UserRoastCard username={username} {language} {roastData} />
 
 </Layout>

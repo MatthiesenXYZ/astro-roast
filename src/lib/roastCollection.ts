@@ -2,20 +2,6 @@ import { RoastCollection, and, db, eq } from 'astro:db';
 import { toPascalCase } from '@matthiesenxyz/integration-utils';
 import { languages } from './supportedLanguages';
 
-// Get the Previous Roasts from the database
-const previousRoasts = await db.select().from(RoastCollection);
-
-// Sort the previous roasts by createdAt date
-const sorted = previousRoasts.sort(
-	({ createdAt: start }, { createdAt: end }) => new Date(end).getTime() - new Date(start).getTime()
-);
-
-// Get the latest 15 roasts
-const latestRoasts = sorted.slice(0, 15);
-
-// Get the last roast
-const lastRoast = sorted[0];
-
 // Get the Previous Roasts by language
 const roastsByLanguage = async (language: string) => {
 	return (
@@ -35,9 +21,26 @@ const lastRoastByLanguage = async (language: string) => {
 // Function to get roasts
 export const getRoasts = async () => {
 	return {
-		allRoasts: sorted || [],
-		last15Roasts: latestRoasts,
-		lastRoast: lastRoast,
+		allRoasts: async () => {
+			return (await db.select().from(RoastCollection)).sort(
+				({ createdAt: start }, { createdAt: end }) =>
+					new Date(end).getTime() - new Date(start).getTime()
+			);
+		},
+		last15Roasts: async () => {
+			return (await db.select().from(RoastCollection))
+				.sort(
+					({ createdAt: start }, { createdAt: end }) =>
+						new Date(end).getTime() - new Date(start).getTime()
+				)
+				.slice(0, 15);
+		},
+		lastRoast: async () => {
+			return (await db.select().from(RoastCollection)).sort(
+				({ createdAt: start }, { createdAt: end }) =>
+					new Date(end).getTime() - new Date(start).getTime()
+			)[0];
+		},
 		roastSelect: async (username: string, language: string) => {
 			return await db
 				.select()

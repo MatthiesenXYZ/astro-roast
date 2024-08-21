@@ -154,7 +154,6 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 		public_repos: profileResponse.public_repos,
 		profile_readme: readmeResponse,
 		last_15_repositories: repoResponse
-			// biome-ignore lint/suspicious/noExplicitAny: type is unknown
 			.map((repo: any) => ({
 				name: repo.name,
 				description: repo.description,

@@ -6,7 +6,7 @@ import Layout from '../layouts/Layout.astro';
 import { getOgImagePath, getRoasts, makeDescription } from '../lib/roastCollection';
 
 // Fetch the last roast for the description and OG image
-const roast = (await getRoasts()).lastRoast;
+const roast = await (await getRoasts()).lastRoast();
 
 // Generate description and OG image path
 const description = makeDescription(roast);

@@ -1,4 +1,3 @@
-import { toPascalCase } from '@matthiesenxyz/integration-utils';
 import type { APIContext, APIRoute } from 'astro';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { decode } from 'html-entities';
@@ -36,7 +35,7 @@ export const GET: APIRoute = async (context: APIContext): Promise<Response> => {
 		template: html(
 			decode(
 				await astroContainer.renderToString(OGImageTemplate, {
-					props: { username: toPascalCase(username), language },
+					props: { username, language },
 				})
 			)
 		),
