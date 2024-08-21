@@ -1,0 +1,50 @@
+---
+import { Card, Icon } from 'astrolace:components';
+import { getOgImagePath, getRoastPath } from '../lib/roastCollection';
+import { getSvg } from '../lib/svgMap';
+
+interface Props {
+	username: string;
+	language: string;
+	roastData:
+		| {
+				response: string;
+				username: string;
+				language: string;
+				createdAt: Date;
+		  }
+		| undefined;
+}
+
+const { username, language, roastData } = Astro.props;
+---
+<Card class="web-frame">
+    <h1 class="flex align-center items-center gap-2 text-2xl font-bold text-secondary text-shadow-lg">Roast for <a class="text-accent text-shadow-lg" href={`https://github.com/${username}`}>{username}</a> <Icon src={getSvg("fire")} /></h1>
+
+    <div class="py-2 divider"></div>
+
+    {
+        roastData ? (
+            <div style="white-space: pre-line;">{roastData.response}</div>
+        ) : (
+            <p>No roast found for {username} in {language}.</p>
+        )
+    }
+
+    <div class="py-2 divider"></div>
+
+    <div class="flex">
+        <div class="text-blue font-bold text-align-left flex-none">
+            <a href={import.meta.env.BASE_URL} class="inline flex align-center items-center gap-2 ">Back to the Roaster <Icon src={getSvg('back')} /></a>
+        </div>
+
+        <div class="w-full"></div>
+
+        <div class="text-blue font-bold text-align-right flex-none">
+            <div class="flex flex-col">
+                <a href={`/${getOgImagePath(roastData)}`} class="inline flex align-center items-center gap-2 "><Icon src={getSvg('image')} /> Shareable Image</a>
+                <a class="flex align-center items-center gap-2 " href={getRoastPath(roastData)}><Icon src={getSvg('link')} /> Shareable link</a>
+            </div>
+        </div>
+    </div>
+</Card>

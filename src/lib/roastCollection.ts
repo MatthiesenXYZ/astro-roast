@@ -39,7 +39,7 @@ export const makeDescription = (roast?: {
 }) => {
 	if (!roast) return 'Get Roasted!';
 
-	return `Get Roasted!\n\n${roast.username} (${roast.language}) says: "${roast.response}"\n\nThis roast was created on ${new Date(roast.createdAt).toLocaleDateString()}. (Roasts are meant for fun! and should not be taken seriously.)`;
+	return `${roast.username} (${roast.language}): "${roast.response.slice(0, 150).trimEnd()}...." — All roasts are only meant for fun! And should not be taken seriously.`;
 };
 
 // Function to get the OG image path
@@ -52,4 +52,16 @@ export const getOgImagePath = (roast?: {
 	if (!roast) return '';
 
 	return `${roast.language}/${roast.username}.png`;
+};
+
+// Function to get the path
+export const getRoastPath = (roast?: {
+	username: string;
+	language: string;
+	response: string;
+	createdAt: Date;
+}) => {
+	if (!roast) return '#';
+
+	return `/${roast.language}/${roast.username}`;
 };

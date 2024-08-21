@@ -1,9 +1,9 @@
 ---
-import { Button, Card, Input, Option, Select } from 'astrolace:components';
+import { Divider } from 'astrolace:components';
 import PreviousRoasts from '../components/PreviousRoasts.astro';
+import Roaster from '../components/Roaster.astro';
 import Layout from '../layouts/Layout.astro';
 import { getOgImagePath, getRoasts, makeDescription } from '../lib/roastCollection';
-import { languages } from '../lib/supportedLanguages';
 
 // Fetch the last roast for the description and OG image
 const roast = (await getRoasts()).lastRoast;
@@ -12,135 +12,12 @@ const roast = (await getRoasts()).lastRoast;
 const description = makeDescription(roast);
 const ogImage = getOgImagePath(roast);
 ---
-<Layout 
-	title="Get Roasted" 
-	description={description} 
-	ogImage={ogImage}
-	>
+<Layout title="Get Roasted" description={description} ogImage={ogImage}>
+
+	<Roaster />
 	
-	<Card class="sm:w-full sm:px-8 md:px-32 lg:px-64">
-
-		<h2 class="text-3xl font-bold pb-2 text-secondary">Get Roasted</h2>
-
-		<div class="divider"></div>
-
-		<form id="roast" method="POST" action="/api/openai">
-			<Input 
-				form="roast" 
-				name="username" 
-				placeholder="Enter your friend's Username" 
-				label="Github Username or Organization" 
-				helpText="Username or Organization" 
-				class=" text-accent"
-				/>
-
-			<div class="py-2"></div>
-
-			<Select form="roast" name="language" value="english" label="Language" class="text-accent">
-				{
-					Object.entries(languages).map(([key, value]) => (
-						<Option value={key}>{value.name}</Option>
-					))
-				}
-			</Select>
-
-			<div class="py-2"></div>
-
-			<Button 
-				form="roast" 
-				id="roastbutton" 
-				variant="primary" 
-				size="medium" 
-				type="submit"
-				class="font-bold"
-				>Roast 'em!
-			</Button>
-		</form>
-	</Card>
-
-	<div class="py-2"></div>
-
-	<Card id="roast-result" style="display: none;" class="sm:w-full sm:px-8 md:px-32 lg:px-64">
-		
-		<h2 class="text-2xl font-bold text-secondary">Roast Result</h2>
-
-        <div class="py-2 divider"></div>
-		
-		<p style="white-space: pre-line;">Your roast will appear here!</p>
-		
-		<div class="pt-4 text-blue font-bold text-align-right">
-			<a id="roastedurlpath" href="#">Shareable link</a>
-		</div>
-
-	</Card>
-
-	<div class="py-2"></div>
+	<Divider class="divider web-frame" />
 
 	<PreviousRoasts />
 	
-	<script>
-	import type { SlButton } from "astrolace:types";
-	import JSConfetti from 'js-confetti'
-	
-		// Get form and button elements
-		const form = document.getElementById('roast') as HTMLFormElement;
-		const roastButton = document.getElementById('roastbutton') as SlButton;
-
-		// Function to set button state
-		function setButton(button: SlButton, state: boolean) {
-			button.loading = state;
-			button.disabled = state;
-		}
-
-		// Add event listener for form submission
-		form.addEventListener('submit', async (event) => {
-			// Prevent default form submission
-			event.preventDefault();
-
-			// Create a new instance of JSConfetti
-			const jsConfetti = new JSConfetti()
-
-			// Set button state to loading
-			setButton(roastButton, true);
-
-			// Get form data
-			const formData = new FormData(form);
-			const username = formData.get('username');
-			const language = formData.get('language');
-
-			// Perform the fetch request to the OpenAI API
-			fetch(form.action, {
-				method: form.method,
-				body: new FormData(form),
-			})
-			.then(response => response.json())
-			.then(data => {
-
-				// Make the roast result card visible
-				const roastResultCard = document.querySelector('#roast-result') as HTMLDivElement;
-				roastResultCard.style.display = 'block';
-
-				// Update the roast text
-				const roastResultText = roastResultCard.querySelector('p') as HTMLParagraphElement;
-				roastResultText.textContent = data.roast;
-
-				// Update the shareable link
-				const roastedUrlPath = document.querySelector('#roastedurlpath') as HTMLAnchorElement;
-				roastedUrlPath.href = `/${language}/${username}`;
-
-				// Reset button state
-				setButton(roastButton, false);
-
-				// Trigger confetti animation
-				jsConfetti.addConfetti()
-			})
-			.catch(error => {
-				// Handle error
-				console.error('Error:', error);
-
-				// Reset button state
-				setButton(roastButton, false);
-			});
-		});
-	</script>
 </Layout>

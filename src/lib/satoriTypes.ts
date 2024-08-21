@@ -9,8 +9,10 @@ type ResvgOptions = NonNullable<ConstructorParameters<typeof Resvg>[1]>;
 interface VNode {
 	type: string;
 	props: {
+		// biome-ignore lint/suspicious/noExplicitAny: type is unknown
 		style?: Record<string, any>;
 		children?: string | VNode | VNode[];
+		// biome-ignore lint/suspicious/noExplicitAny: type is unknown
 		[prop: string]: any;
 	};
 }

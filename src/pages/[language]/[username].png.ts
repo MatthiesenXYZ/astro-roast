@@ -4,6 +4,7 @@ import { decode } from 'html-entities';
 import { html } from 'satori-html';
 import { FONTS } from '../../../consts';
 import OGImageTemplate from '../../components/OGImageTemplate.astro';
+import { jsonResponse } from '../../lib/jsonResponse';
 import { satoriAstroOG } from '../../lib/satoriOG';
 import { languages } from '../../lib/supportedLanguages';
 import { getPublicFonts } from '../../lib/utils';
@@ -21,22 +22,12 @@ export const GET: APIRoute = async (context: APIContext): Promise<Response> => {
 
 	// Validate username and language
 	if (!username || !language) {
-		return new Response(JSON.stringify({ error: 'Missing username or language' }), {
-			status: 400,
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		return jsonResponse({ error: 'Missing username or language' }, 400);
 	}
 
 	// Check if the language is supported
 	if (languages[language] === undefined || languages[language] === null) {
-		return new Response(JSON.stringify({ error: `Language "${language}" is not yet supported.` }), {
-			status: 400,
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		return jsonResponse({ error: `Language "${language}" is invalid or not yet supported.` }, 400);
 	}
 
 	// Generate the image using Satori and return it

@@ -1,6 +1,17 @@
 ---
+import Logo from '../assets/svgs/Logo.astro';
 ---
-<div class="flex flex-col text-center align-center p-8">
-    <h1 class="text-4xl text-primary font-bold">Welcome to the Astro based Roast Generator!</h1>
-    <p class=" text-accent">Get ready to roast your friends in various languages! <span class="text-secondary">(Using OpenAI)</span></p>	
+
+<div class="flex flex-row web-frame text-center align-center items-center">
+
+    <div class="flex-none w-[64px]"><a href={import.meta.env.BASE_URL}><Logo height='64px' width='64px' /></a></div>
+    
+
+    <div class="flex flex-col text-center align-center p-8 w-full">
+        <h1 class="text-4xl text-primary font-bold text-shadow-lg">Welcome to the Astro Roast Generator!</h1>
+        <p class=" text-accent">Get ready to roast your friends in various languages! <span class="text-secondary">(Using OpenAI)</span></p>	
+    </div>
+
+    <div class="flex-none w-[64px]"></div>
+
 </div>

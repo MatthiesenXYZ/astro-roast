@@ -1,5 +1,5 @@
 ---
-import { Card } from 'astrolace:components';
+import UserRoastCard from '../../components/UserRoastCard.astro';
 import Layout from '../../layouts/Layout.astro';
 import { getOgImagePath, getRoasts, makeDescription } from '../../lib/roastCollection';
 import { languages } from '../../lib/supportedLanguages';
@@ -14,7 +14,7 @@ if (!language || !username) {
 
 // Check if the language is supported
 if (languages[language] === undefined || languages[language] === null) {
-	throw new Error(`Language "${language}" is not yet supported.`);
+	throw new Error(`Language "${language}" is invalid or not yet supported.`);
 }
 
 // Fetch the roast data
@@ -25,42 +25,8 @@ const description = makeDescription(roastData);
 const ogImage = getOgImagePath(roastData);
 ---
 
-<Layout 
-    title={`Roast for ${username}`} 
-    description={description} 
-    ogImage={ogImage}
-    >
+<Layout title={`Roast for ${username}`} description={description} ogImage={ogImage}>
 
-    <div class="w-[100vw] flex align-center justify-center p-4">
-        <Card class="sm:w-full sm:px-8 md:px-32 lg:px-64">
-            <h1 class="text-2xl font-bold text-secondary">Roast for <a class="text-accent" href={`https://github.com/${username}`}>{username}</a></h1>
+    <UserRoastCard username={username} language={language} roastData={roastData} />
 
-            <div class="py-2 divider"></div>
-
-            {
-                roastData ? (
-                    <div style="white-space: pre-line;" set:text={roastData.response} />
-                ) : (
-                    <p>No roast found for {username} in {language}.</p>
-                )
-            }
-
-            <div class="py-2 divider"></div>
-
-            <div class="flex">
-                <div class="text-blue font-bold text-align-left flex-none">
-                    <a href="/" class="inline">Back to the Roaster</a>
-                </div>
-    
-                <div class="w-full"></div>
-
-                <div class="text-blue font-bold text-align-right flex-none">
-                    <div class="flex flex-col">
-                        <a href={`/${language}/${username}.png`} class="inline">Shareable Image</a>
-                        <a href={`/${language}/${username}`}>Shareable link</a>
-                    </div>
-                </div>
-            </div>
-        </Card>
-    </div>
 </Layout>

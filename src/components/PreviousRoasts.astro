@@ -1,6 +1,7 @@
 ---
-import { Card } from 'astrolace:components';
+import { Card, Icon } from 'astrolace:components';
 import { getRoasts } from '../lib/roastCollection';
+import { getSvg } from '../lib/svgMap';
 
 // Fetch the last 15 roasts
 const previousRoasts = (await getRoasts()).last15Roasts;
@@ -8,21 +9,24 @@ const previousRoasts = (await getRoasts()).last15Roasts;
 
 {
     previousRoasts.length > 0 ? (
-        <Card class="sm:w-full sm:px-8 md:px-32 lg:px-64">
-            <h2 class="text-2xl font-bold text-secondary">Previous 15 Roasts</h2>
+        <Card class="web-frame">
+            <h2 class="text-2xl font-bold text-secondary text-shadow-lg">Previous 15 Roasts</h2>
             <div class="py-2 divider"></div>
             {
                 previousRoasts.map((roast) => (
                     <div class="pb-4">
                         <h3 class="text-lg font-bold text-accent">{roast.username}</h3> 
-                        <p>{roast.response.slice(0, 100)}... <a class="text-blue" href={`/${roast.language}/${roast.username}`}>Read more</a></p>
+                        <div class="flex flex-row">
+                            <p class="line-clamp-1">{roast.response}</p>
+                            <a class="flex-none text-blue text-align-right inline flex align-center items-center gap-2 " href={`/${roast.language}/${roast.username}`}>Read more <Icon src={getSvg('forward')} /></a>
+                        </div>
                     </div>
                 ))
             }
         </Card>
     ) : (
-        <Card class="sm:w-full sm:px-8 md:px-32 lg:px-64">
-            <h2 class="text-xl font-bold text-secondary">Previous 15 Roasts</h2>
+        <Card class="web-frame">
+            <h2 class="text-xl font-bold text-secondary text-shadow-lg">Previous 15 Roasts</h2>
             <div class="py-2"></div>
             <p>No previous roasts found.</p>
         </Card>

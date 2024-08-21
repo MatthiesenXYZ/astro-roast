@@ -1,0 +1,177 @@
+---
+import { Alert, Button, Card, Icon, Input, Option, Select } from 'astrolace:components';
+import { languages } from '../lib/supportedLanguages';
+import { getSvg } from '../lib/svgMap';
+---
+
+{/* Roaster Component - Main Card */}
+<Card class="web-frame">
+
+	<h2 class="flex items-center align-center gap-2 text-3xl font-bold pb-2 text-secondary text-shadow-lg">Get Roasted <Icon src={getSvg("fire")} /></h2>
+
+	<div class="divider"></div>
+
+	<form id="roast" method="POST" action="/api/openai">
+        <div class="flex text-accent font-bold items-center align-center gap-1 pb-1"><Icon src={getSvg("github")} />Github Username or Organization</div>
+		<Input 
+			form="roast" 
+			name="username" 
+			placeholder="Enter your friend's Username" 
+			/>
+
+		<div class="py-2"></div>
+
+        <div class="flex text-accent font-bold items-center align-center gap-1 pb-1"><Icon src={getSvg("globe")} />Language</div>
+		<Select form="roast" name="language" value="english">
+			{
+				Object.entries(languages).map(([key, value]) => (
+					<Option value={key}>{value.name}</Option>
+				))
+			}
+		</Select>
+
+		<div class="py-2"></div>
+
+		<Button 
+			form="roast" 
+			id="roastbutton" 
+			size="medium" 
+			type="submit"
+			class="cbtn font-bold"
+			>Roast 'em!
+			<Icon src={getSvg("burn")} slot="suffix" />
+		</Button>
+	</form>
+</Card>
+
+<div class="py-2"></div>
+
+{/* Roast Result Card */}
+<Card id="roast-result" style="display: none;" class="web-frame">
+		
+	<h2 class="text-2xl font-bold text-secondary text-shadow-lg">Roast Result</h2>
+
+    <div class="py-2 divider"></div>
+		
+    <p style="white-space: pre-line;">Your roast will appear here!</p>
+		
+	<div class="pt-4 text-blue font-bold text-align-right">
+		<a id="roastedurlpath" href="#">Shareable link</a>
+	</div>
+
+</Card>
+
+{/* Alert for errors */}
+<Alert id='roast-alert' variant={'danger'} duration={4000}></Alert>
+
+<style>
+	.cbtn::part(base) {
+            background: linear-gradient(45deg, #ff6f61, #d63384);
+            color: rgb(255, 255, 255);
+			text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+            border: none;
+            padding-left: 0.5rem;
+			padding-right: 1rem;
+			padding-top: 0.25rem;
+			padding-bottom: 0.25rem;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+	}
+	.cbtn::part(base):hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(45deg, #d63384, #ff6f61);
+	}
+
+	.cbtn::part(base):active {
+            transform: translateY(0);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(45deg, #ff6f61, #d63384);
+	}
+</style>
+
+<script>
+import type { SlAlert, SlButton } from "astrolace:types";
+import JSConfetti from 'js-confetti'
+	
+	// Get form and button elements
+	const form = document.getElementById('roast') as HTMLFormElement;
+    const roastButton = document.getElementById('roastbutton') as SlButton;
+    const roastAlert = document.getElementById('roast-alert') as SlAlert;
+
+	// Function to set button state
+	function setButton(button: SlButton, state: boolean) {
+		button.loading = state;
+		button.disabled = state;
+	}
+
+	// Add event listener for form submission
+	form.addEventListener('submit', async (event) => {
+		// Prevent default form submission
+		event.preventDefault();
+
+		// Create a new instance of JSConfetti
+		const jsConfetti = new JSConfetti()
+
+		// Set button state to loading
+		setButton(roastButton, true);
+
+		// Get form data
+		const formData = new FormData(form);
+		const username = formData.get('username');
+		const language = formData.get('language');
+
+        // validate username
+        if (!username || typeof username !== 'string' || username.trim() === '') {
+            roastAlert.innerText = 'Please enter a username.';
+            roastAlert.toast();
+            setButton(roastButton, false);
+            return;
+        }
+
+		// Perform the fetch request to the OpenAI API
+		fetch(form.action, {
+			method: form.method,
+			body: new FormData(form),
+		})
+		.then(response => response.json())
+		.then(data => {
+
+			// Make the roast result card visible
+			const roastResultCard = document.querySelector('#roast-result') as HTMLDivElement;
+			roastResultCard.style.display = 'block';
+
+			// Update the roast text
+			const roastResultText = roastResultCard.querySelector('p') as HTMLParagraphElement;
+			roastResultText.textContent = data.roast;
+
+    		// Update the shareable link
+			const roastedUrlPath = document.querySelector('#roastedurlpath') as HTMLAnchorElement;
+			roastedUrlPath.href = `/${language}/${username}`;
+
+			// Reset button state
+			setButton(roastButton, false);
+
+			// Trigger confetti animation
+			jsConfetti.addConfetti({
+				emojis: ["💥", "🔥", "❤️‍🔥", "🧨", "🎆", "💣"],
+				confettiNumber: 100,
+			});
+		})
+		.catch(error => {
+			// Handle error
+			console.error('Error:', error);
+
+            roastAlert.innerText = 'An error occurred while fetching the roast. Please try again.\nMore info in the console.';
+            roastAlert.toast();
+
+			// Reset button state
+			setButton(roastButton, false);
+		});
+	});
+</script>

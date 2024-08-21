@@ -3,6 +3,7 @@ import { GITHUB_API_KEY, OPENAI_API_KEY } from 'astro:env/server';
 import type { APIContext, APIRoute } from 'astro';
 import OpenAI from 'openai';
 import { GITHUB_API_USERPROFILE, OPENAI_SETTINGS, SITE_DOMAIN } from '../../../consts';
+import { jsonResponse } from '../../lib/jsonResponse';
 import { getRoasts } from '../../lib/roastCollection';
 import { languages } from '../../lib/supportedLanguages';
 
@@ -30,18 +31,12 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 
 	// Validate username and language
 	if (!username || !language) {
-		return new Response(JSON.stringify({ error: 'Missing username or language' }), {
-			status: 400,
-			headers,
-		});
+		return jsonResponse({ error: 'Missing username or language' }, 400);
 	}
 
 	// Check if the language is supported
 	if (languages[language] == null || languages[language] === undefined) {
-		return new Response(JSON.stringify({ error: 'Invalid language' }), {
-			status: 400,
-			headers,
-		});
+		return jsonResponse({ error: 'Invalid or Unsupported language' }, 400);
 	}
 
 	// Check if a roast already exists for the user in the specified language
@@ -49,10 +44,7 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 
 	// If a roast exists, return it
 	if (existingRoastInCurrentLanguage) {
-		return new Response(JSON.stringify({ roast: existingRoastInCurrentLanguage.response }), {
-			status: 200,
-			headers,
-		});
+		return jsonResponse({ roast: existingRoastInCurrentLanguage.response }, 200);
 	}
 
 	// If GitHub API key is provided, add it to the headers
@@ -92,10 +84,7 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 			useToken = true;
 		} else {
 			// Log the error and return a 500 response
-			return new Response(
-				JSON.stringify({ error: 'Error fetching from Github, try again later.' }),
-				{ status: 500 }
-			);
+			return jsonResponse({ error: 'Error fetching from Github, try again later.' }, 500);
 		}
 	} catch (error) {
 		// Log the error and try fetching without the token
@@ -110,7 +99,7 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 
 	// Remove the Authorization header if the token was not used
 	if (!useToken) {
-		// biome-ignore lint/performance/noDelete: <explanation>
+		// biome-ignore lint/performance/noDelete: ignore
 		delete headers.Authorization;
 	}
 
@@ -165,6 +154,7 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 		public_repos: profileResponse.public_repos,
 		profile_readme: readmeResponse,
 		last_15_repositories: repoResponse
+			// biome-ignore lint/suspicious/noExplicitAny: type is unknown
 			.map((repo: any) => ({
 				name: repo.name,
 				description: repo.description,
@@ -211,10 +201,10 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 		}
 
 		// Return the roast
-		return new Response(JSON.stringify({ roast }), { status: 200 });
+		return jsonResponse({ roast }, 200);
 	} catch (error) {
 		// Log any errors from OpenAI API
 		console.error('Error:', error);
-		return new Response(JSON.stringify({ error: 'Failed to generate roast' }), { status: 500 });
+		return jsonResponse({ error: 'Failed to generate roast' }, 500);
 	}
 };
