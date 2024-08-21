@@ -1,54 +1,77 @@
 ---
-import { languages } from '../lib/supportedLanguages';
 import { getRoasts } from '../lib/roastCollection';
+import { languages } from '../lib/supportedLanguages';
 
 interface Props {
-    username: string;
-    language: string;
+	username: string;
+	language: string;
 }
 
 // Get the username and language from props
 const { username, language } = Astro.props;
 
 // Validate the language and username
-if ( languages[language] === undefined || languages[language] === null ) {
-    throw new Error(`Language "${language}" is not yet supported.`);
+if (languages[language] === undefined || languages[language] === null) {
+	throw new Error(`Language "${language}" is not yet supported.`);
 }
 
 // Fetch the roast data
-const roastData = await (await getRoasts()).roastSelect(username, language)
+const roastData = await (await getRoasts()).roastSelect(username, language);
 
 // Check if roast data exists
 if (!roastData) {
-    throw new Error(`No roast found for ${username} in ${language}.`);
+	throw new Error(`No roast found for ${username} in ${language}.`);
 }
 
 // Get the roast response
-let { username: name, response: roast } = roastData;
+const { username: name, response: roast } = roastData;
 ---
+{/* Page Structure & Layout - Start */}
 <div style="display: flex; flex-direction: column; justify-items: center; align-items: center; background-color: #1c1c1c; font-family: Poppins; height: 100%;">
 
+    {/* Page Header - Start */}
     <div style="display: flex; flex-direction: column; justify-items: center; align-items: center;">
-        <h1 style="font-size: 4rem; line-height: 4rem; color: #dcdcdc; text-shadow: 4px 4px 10px black;">
-            Welcome to the Astro based Roast Generator!
-        </h1>
-        <p style="font-size: 1.5rem; line-height: 1rem; color: #dcdcdc; text-shadow: 4px 4px 10px black;">Get ready to roast your friends in various languages! (Using OpenAI)</p>	
+
+        {/* Welcome Message - Start */}
+        <h1 style="font-size: 4rem; line-height: 4rem; color: #7480ff; text-shadow: 4px 4px 10px black;">Welcome to the Astro based Roast Generator!</h1>
+        {/* Welcome Message - End */}
+
+        {/* Subheading - Start */}
+        <p style="font-size: 1.5rem; line-height: 1rem; color: #00cdb8; text-shadow: 4px 4px 10px black;">Get ready to roast your friends in various languages! <span style="color:#ff52d9;">(Using OpenAI)</span></p>	
+        {/* Subheading - End */}
+    
     </div>
+    {/* Page Header - End */}
 
-    <div style="display: flex; flex-direction: row; justify-items: center; align-items: center; padding-top: 2rem; padding-bottom: 0;">
-        <div style="display: flex; flex-direction: column; justify-items: center; align-items: center; padding-right: 1rem;">
+    {/* Card Container - Start */}
+    <div style="display: flex; flex-direction: column; justify-items: center; align-items: center; padding-top: 0.5rem; margin-top: 2rem; padding-bottom: 0.5rem; background-color: #29292d; border-color: #454545; border-width: 3px; padding: 1rem; width: 90vw; box-shadow: 1px 1px 20px black;">
+                
+        {/* Card Header - Start */}
+        <h2 style="font-size: 4rem; line-height: 5rem; text-shadow: 4px 4px 10px black; align-items: center; gap: 1.5rem;">
 
-            <div style="display: flex; flex-direction: column; justify-items: center; align-items: center; padding-top: 0.5rem; padding-bottom: 0.5rem; background-color: #04001f; border-color: #454545; border-width: 3px; padding: 1rem; width: 90vw; box-shadow: 1px 1px 20px black;">
-                <h2 style="font-size: 4rem; line-height: 5rem; color: #0073ff; text-shadow: 4px 4px 10px black;">
-                    {name}
-                </h2>
-                <div style="display: flex; flex-direction: column; justify-items: center; align-items: center;">
-                    <p style="font-size: 2rem; line-height: 2.5rem; color: #cacaca; text-shadow: 4px 4px 10px black;white-space: pre-line;">
-                        {roast}
-                    </p>
-                </div>
-            </div>
-            
+            {/* Github SVG Logo - Start */}
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24"><path fill="white" d="M12.5.75C6.146.75 1 5.896 1 12.25c0 5.089 3.292 9.387 7.863 10.91c.575.101.79-.244.79-.546c0-.273-.014-1.178-.014-2.142c-2.889.532-3.636-.704-3.866-1.35c-.13-.331-.69-1.352-1.18-1.625c-.402-.216-.977-.748-.014-.762c.906-.014 1.553.834 1.769 1.179c1.035 1.74 2.688 1.25 3.349.948c.1-.747.402-1.25.733-1.538c-2.559-.287-5.232-1.279-5.232-5.678c0-1.25.445-2.285 1.178-3.09c-.115-.288-.517-1.467.115-3.048c0 0 .963-.302 3.163 1.179c.92-.259 1.897-.388 2.875-.388c.977 0 1.955.13 2.875.388c2.2-1.495 3.162-1.179 3.162-1.179c.633 1.581.23 2.76.115 3.048c.733.805 1.179 1.825 1.179 3.09c0 4.413-2.688 5.39-5.247 5.678c.417.36.776 1.05.776 2.128c0 1.538-.014 2.774-.014 3.162c0 .302.216.662.79.547C20.709 21.637 24 17.324 24 12.25C24 5.896 18.854.75 12.5.75"/></svg>
+            {/* Github SVG Logo - End */}
+                        
+            {/* Username - Start */}
+            <span style="color: #ff52d9;">{name}</span>
+            {/* Username - End */}
+                
+        </h2>
+        {/* Card Header - End */}
+                
+        {/* Card Body - Start */}
+        <div style="display: flex; flex-direction: column; justify-items: center; align-items: center; border-top: 3px solid #454545;">
+                    
+            {/* Roast - Start */}
+            <p style="font-size: 2rem; line-height: 2.5rem; color: #f5f5f5; text-shadow: 4px 4px 10px black;white-space: pre-line; padding: 1rem;">{roast}</p>
+            {/* Roast - End */}
+                
         </div>
+        {/* Card Body - End */}
+
     </div>
+    {/* Card Container - End */}
+
 </div>
+{/* Page Structure & Layout - End */}

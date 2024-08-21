@@ -1,5 +1,5 @@
-import type { Resvg } from "@resvg/resvg-js";
-import type satori from "satori";
+import type { Resvg } from '@resvg/resvg-js';
+import type satori from 'satori';
 
 // Types for SatoriAstroOG (Based on florian-lefebvre's Satori-astro)
 
@@ -7,19 +7,19 @@ type SatoriParameters = Parameters<typeof satori>;
 type SatoriOptions = SatoriParameters[1];
 type ResvgOptions = NonNullable<ConstructorParameters<typeof Resvg>[1]>;
 interface VNode {
-    type: string;
-    props: {
-        style?: Record<string, any>;
-        children?: string | VNode | VNode[];
-        [prop: string]: any;
-    };
+	type: string;
+	props: {
+		style?: Record<string, any>;
+		children?: string | VNode | VNode[];
+		[prop: string]: any;
+	};
 }
 export type SatoriAstroOGOptions = {
 	/**
 	 * The element passed to `satori`. If you don't use React, make sure
 	 * to have a look at https://github.com/natemoo-re/satori-html.
 	 */
-	template: SatoriParameters[0]|VNode;
+	template: SatoriParameters[0] | VNode;
 	/**
 	 * The image width
 	 */
@@ -34,7 +34,7 @@ export type SatoriAstroOGOptions = {
  * Options forwarded to satori, except for `width` and `height` which
  * come from `satoriAstroOG`.
  */
-export type ToSvgOptions = Omit<SatoriOptions, "width" | "height">;
+export type ToSvgOptions = Omit<SatoriOptions, 'width' | 'height'>;
 
 /**
  * Options forwarded to satori and resvg.
@@ -50,9 +50,7 @@ export type ToImageOptions = {
 	 * one used by satori (which is unlikely), you can pass a function that
 	 * accepts width and height as arguments.
 	 */
-	resvg?:
-		| ResvgOptions
-		| ((params: { width: number; height: number }) => ResvgOptions);
+	resvg?: ResvgOptions | ((params: { width: number; height: number }) => ResvgOptions);
 };
 
 export type ToResponseOptions = ToImageOptions & {
