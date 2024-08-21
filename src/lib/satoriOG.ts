@@ -7,6 +7,7 @@ import type {
 	ToSvgOptions,
 } from "./satoriTypes";
 
+// Define the satoriAstroOG function (Based on florian-lefebvre's Satori-astro)
 export const satoriAstroOG = ({
 	width,
 	height,

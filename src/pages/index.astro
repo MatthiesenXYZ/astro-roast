@@ -5,8 +5,10 @@ import { languages } from "../lib/supportedLanguages";
 import PreviousRoasts from "../components/PreviousRoasts.astro";
 import { getRoasts, makeDescription, getOgImagePath } from "../lib/roastCollection";
 
+// Fetch the last roast for the description and OG image
 const roast = (await getRoasts()).lastRoast;
 
+// Generate description and OG image path
 const description = makeDescription(roast);
 const ogImage = getOgImagePath(roast);
 ---
@@ -18,7 +20,7 @@ const ogImage = getOgImagePath(roast);
 	
 	<Card class="sm:w-full sm:px-8 md:px-32 lg:px-64">
 
-		<h2 class="text-3xl font-bold pb-2">Get Roasted</h2>
+		<h2 class="text-3xl font-bold pb-2 text-secondary">Get Roasted</h2>
 
 		<div class="divider"></div>
 
@@ -29,11 +31,12 @@ const ogImage = getOgImagePath(roast);
 				placeholder="Enter your friend's Username" 
 				label="Github Username or Organization" 
 				helpText="Username or Organization" 
+				class=" text-accent"
 				/>
 
 			<div class="py-2"></div>
 
-			<Select form="roast" name="language" value="english" label="Language">
+			<Select form="roast" name="language" value="english" label="Language" class="text-accent">
 				{
 					Object.entries(languages).map(([key, value]) => (
 						<Option value={key}>{value.name}</Option>
@@ -59,7 +62,7 @@ const ogImage = getOgImagePath(roast);
 
 	<Card id="roast-result" style="display: none;" class="sm:w-full sm:px-8 md:px-32 lg:px-64">
 		
-		<h2 class="text-2xl font-bold">Roast Result</h2>
+		<h2 class="text-2xl font-bold text-secondary">Roast Result</h2>
 
         <div class="py-2 divider"></div>
 		
@@ -79,16 +82,28 @@ const ogImage = getOgImagePath(roast);
 	import type { SlButton } from "astrolace:types";
 	import JSConfetti from 'js-confetti'
 	
+		// Get form and button elements
 		const form = document.getElementById('roast') as HTMLFormElement;
 		const roastButton = document.getElementById('roastbutton') as SlButton;
 
-		form?.addEventListener('submit', async (event) => {
+		// Function to set button state
+		function setButton(button: SlButton, state: boolean) {
+			button.loading = state;
+			button.disabled = state;
+		}
+
+		// Add event listener for form submission
+		form.addEventListener('submit', async (event) => {
+			// Prevent default form submission
 			event.preventDefault();
 
+			// Create a new instance of JSConfetti
 			const jsConfetti = new JSConfetti()
-			roastButton.loading = true;
-			roastButton.disabled = true;
 
+			// Set button state to loading
+			setButton(roastButton, true);
+
+			// Get form data
 			const formData = new FormData(form);
 			const username = formData.get('username');
 			const language = formData.get('language');
@@ -100,26 +115,31 @@ const ogImage = getOgImagePath(roast);
 			})
 			.then(response => response.json())
 			.then(data => {
-				// Update the roast result card with the response
 
+				// Make the roast result card visible
 				const roastResultCard = document.querySelector('#roast-result') as HTMLDivElement;
 				roastResultCard.style.display = 'block';
+
+				// Update the roast text
 				const roastResultText = roastResultCard.querySelector('p') as HTMLParagraphElement;
 				roastResultText.textContent = data.roast;
 
 				// Update the shareable link
 				const roastedUrlPath = document.querySelector('#roastedurlpath') as HTMLAnchorElement;
 				roastedUrlPath.href = `/${language}/${username}`;
-				roastButton.loading = false;
-				roastButton.disabled = false;
+
+				// Reset button state
+				setButton(roastButton, false);
 
 				// Trigger confetti animation
 				jsConfetti.addConfetti()
 			})
 			.catch(error => {
+				// Handle error
 				console.error('Error:', error);
-				roastButton.loading = false;
-				roastButton.disabled = false;
+
+				// Reset button state
+				setButton(roastButton, false);
 			});
 		});
 	</script>

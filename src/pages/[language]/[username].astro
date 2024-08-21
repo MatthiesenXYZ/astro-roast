@@ -4,19 +4,23 @@ import Layout from "../../layouts/Layout.astro";
 import { Card } from "astrolace:components";
 import { getOgImagePath, getRoasts, makeDescription } from "../../lib/roastCollection";
 
-
+// Get the language and username from the URL parameters
 const { language, username } = Astro.params;
 
+// Validate the language and username
 if (!language || !username) {
     throw new Error("Language and username are required.");
 }
 
+// Check if the language is supported
 if ( languages[language] === undefined || languages[language] === null ) {
     throw new Error(`Language "${language}" is not yet supported.`);
 }
 
+// Fetch the roast data
 const roastData = await (await getRoasts()).roastSelect(username, language)
 
+// Generate description and OG image path
 const description = makeDescription(roastData);
 const ogImage = getOgImagePath(roastData);
 
@@ -30,7 +34,7 @@ const ogImage = getOgImagePath(roastData);
 
     <div class="w-[100vw] flex align-center justify-center p-4">
         <Card class="sm:w-full sm:px-8 md:px-32 lg:px-64">
-            <h1 class="text-2xl font-bold">Roast for <a class="text-blue" href={`https://github.com/${username}`}>{username}</a></h1>
+            <h1 class="text-2xl font-bold text-secondary">Roast for <a class="text-accent" href={`https://github.com/${username}`}>{username}</a></h1>
 
             <div class="py-2 divider"></div>
 

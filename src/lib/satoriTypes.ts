@@ -1,6 +1,8 @@
 import type { Resvg } from "@resvg/resvg-js";
 import type satori from "satori";
 
+// Types for SatoriAstroOG (Based on florian-lefebvre's Satori-astro)
+
 type SatoriParameters = Parameters<typeof satori>;
 type SatoriOptions = SatoriParameters[1];
 type ResvgOptions = NonNullable<ConstructorParameters<typeof Resvg>[1]>;

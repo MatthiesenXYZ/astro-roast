@@ -1,5 +1,8 @@
 ---
 import { ShoelaceHeader } from 'astrolace:components/header'
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BaseHead from '../components/BaseHead.astro';
 
 interface Props {
     title?: string;
@@ -7,52 +10,37 @@ interface Props {
 	ogImage?: string;
 }
 
+// Get the title, description, and ogImage from props
 const { title, description, ogImage } = Astro.props;
 
+// Generate canonical URL
 const canonical = new URL(Astro.url.pathname, Astro.url.origin).href;
 
+// Get current timestamp for cache busting
 const CurrentTimeStamp = (new Date().getTime() / 1000).toFixed(0)
 
+// Generate Open Graph image URL
 const ogImageURL = `${Astro.site}${ogImage}?v=${CurrentTimeStamp}`;
 ---
 
 <html lang="en" class="sl-theme-dark">
 	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<meta property="og:type" content="website" />
-		<meta property="og:url" content={canonical} />
-		<meta property="og:title" content={`Astro Roaster ${ title && `- ${title}`}`} />
-		<meta property="og:description" content={description} />
-		<meta property="og:image" content={ogImageURL} />
-		<meta property="og:site_name" content={`Astro Roaster ${ title && `- ${title}`}`} />
-		<meta property="og:locale" content="en_US" />
-		<meta property="og:image:width" content="1920" />
-		<meta property="og:image:height" content="1080" />
-		<meta property="twitter:card" content="summary_large_image" />
-		<meta property="twitter:url" content={canonical} />
-		<meta property="twitter:title" content={`Astro Roaster ${ title && `- ${title}`}`} />
-		<meta property="twitter:description" content={description} />
-		<meta property="twitter:image" content={ogImageURL} />
-		<title>Astro Roaster { title && `- ${title}`}</title>
+		<BaseHead 
+			title={title} 
+			description={description} 
+			canonical={canonical} 
+			ogImageURL={ogImageURL} 
+			/>
         <ShoelaceHeader />
 	</head>
 	<body class="overflow-x-hidden font-sans">
 		<div class="w-[100vw]">
 
-			<div class="flex flex-col text-center align-center p-8">
-				<h1 class="text-4xl font-bold">Welcome to the Astro based Roast Generator!</h1>
-				<p>Get ready to roast your friends in various languages! (Using OpenAI)</p>	
-			</div>
+			<Header />
 
 			<slot />
 
-			<div class="flex flex-col text-center align-center p-8">
-				<p class="text-gray-500">Made with ❤️ by Adam Matthiesen</p>
-				<p class="text-gray-500">Check out the <a class="text-blue" href="https://github.com/MatthiesenXYZ/astro-roast">source code</a></p>
-			</div>
+			<Footer />
 
 		</div>
 	</body>

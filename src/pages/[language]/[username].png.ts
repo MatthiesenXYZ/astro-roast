@@ -8,8 +8,10 @@ import { languages } from "../../lib/supportedLanguages";
 import { FONTS } from '../../../consts';
 import { getPublicFonts } from "../../lib/utils";
 
+// Get the OG image fonts
 const { OG_IMAGE } = FONTS;
 
+// Define the GET API route
 export const GET: APIRoute = async ( context: APIContext ): Promise<Response> => {
 
     // Build Astro ContainerAPI
@@ -28,6 +30,7 @@ export const GET: APIRoute = async ( context: APIContext ): Promise<Response> =>
         });
     }
     
+    // Check if the language is supported
     if ( languages[language] === undefined || languages[language] === null ) {
         return new Response(JSON.stringify({ error: `Language "${language}" is not yet supported.` }), {
             status: 400,
@@ -37,7 +40,7 @@ export const GET: APIRoute = async ( context: APIContext ): Promise<Response> =>
         });
     }
 
-    // Generate the image using Satori
+    // Generate the image using Satori and return it
     return await satoriAstroOG({
         template: html(
             decode(await (astroContainer).renderToString(

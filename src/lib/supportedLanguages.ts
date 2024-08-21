@@ -1,3 +1,4 @@
+// This file contains the supported languages and their respective prompt building functions.
 export const languages: Record<string, { name: string; buildPrompt: (username: string, data: any) => string; }> = {
 	english: {
 		name: "English",

@@ -1,5 +1,4 @@
 ---
-import { and, db, eq, RoastCollection } from 'astro:db';
 import { languages } from '../lib/supportedLanguages';
 import { getRoasts } from '../lib/roastCollection';
 
@@ -8,18 +7,23 @@ interface Props {
     language: string;
 }
 
+// Get the username and language from props
 const { username, language } = Astro.props;
 
+// Validate the language and username
 if ( languages[language] === undefined || languages[language] === null ) {
     throw new Error(`Language "${language}" is not yet supported.`);
 }
 
+// Fetch the roast data
 const roastData = await (await getRoasts()).roastSelect(username, language)
 
+// Check if roast data exists
 if (!roastData) {
     throw new Error(`No roast found for ${username} in ${language}.`);
 }
 
+// Get the roast response
 let { username: name, response: roast } = roastData;
 ---
 <div style="display: flex; flex-direction: column; justify-items: center; align-items: center; background-color: #1c1c1c; font-family: Poppins; height: 100%;">
