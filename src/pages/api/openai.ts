@@ -46,6 +46,7 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 
 	// If a roast exists, return it
 	if (existingRoastInCurrentLanguage) {
+		console.log(`Roast already exists for ${username} in ${language}... returning existing roast`);
 		return jsonResponse({ roast: existingRoastInCurrentLanguage.response }, 200);
 	}
 
