@@ -1,3 +1,4 @@
+import { logger } from '@it-astro:logger';
 import { RoastCollection, db } from 'astro:db';
 import { GITHUB_API_KEY, OPENAI_API_KEY } from 'astro:env/server';
 import type { APIContext, APIRoute } from 'astro';
@@ -29,15 +30,17 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 	const username = formData.get('username')?.toString().trim();
 	const language = formData.get('language')?.toString();
 
-	console.log(`New roast request for ${username} in ${language}`);
+	logger.info(`New roast request for ${username} in ${language}`);
 
 	// Validate username and language
 	if (!username || !language) {
+		logger.info('Missing username or language');
 		return jsonResponse({ error: 'Missing username or language' }, 400);
 	}
 
 	// Check if the language is supported
 	if (languages[language] == null || languages[language] === undefined) {
+		logger.info(`Invalid or Unsupported language: ${language}`);
 		return jsonResponse({ error: 'Invalid or Unsupported language' }, 400);
 	}
 
@@ -46,7 +49,7 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 
 	// If a roast exists, return it
 	if (existingRoastInCurrentLanguage) {
-		console.log(`Roast already exists for ${username} in ${language}... returning existing roast`);
+		logger.info(`Roast already exists for ${username} in ${language}... returning existing roast`);
 		return jsonResponse({ roast: existingRoastInCurrentLanguage.response }, 200);
 	}
 
@@ -87,11 +90,12 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 			useToken = true;
 		} else {
 			// Log the error and return a 500 response
+			logger.error(`Error fetching from Github, try again later. Status: ${profileResponse}`);
 			return jsonResponse({ error: 'Error fetching from Github, try again later.' }, 500);
 		}
 	} catch (error) {
 		// Log the error and try fetching without the token
-		console.log(error);
+		logger.error(error as string);
 
 		// Fetch user profile without the token
 		const response = await fetch(API.USER, { headers });
@@ -128,7 +132,7 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 		}
 	} catch (error) {
 		// Log the error and try fetching from the fallback location
-		console.log(error);
+		logger.error(error as string);
 
 		// Fetch README from the fallback location
 		try {
@@ -141,7 +145,7 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 			}
 		} catch (error) {
 			// Log the error and set readmeResponse to an empty string
-			console.log('failed to get readme', error);
+			logger.error(`failed to get readme${error}`);
 			readmeResponse = '';
 		}
 	}
@@ -200,7 +204,7 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 			]);
 		} catch (error) {
 			// Log any errors while saving to the database
-			console.error('Error saving to database:', error);
+			logger.error(`Error saving to database:${error}`);
 		}
 
 		// Return the roast
@@ -208,7 +212,7 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 		return jsonResponse({ roast }, 200);
 	} catch (error) {
 		// Log any errors from OpenAI API
-		console.error('Error:', error);
+		logger.error(`Error:${error}`);
 		return jsonResponse({ error: 'Failed to generate roast' }, 500);
 	}
 };

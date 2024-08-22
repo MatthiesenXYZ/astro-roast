@@ -1,5 +1,6 @@
 import db from '@astrojs/db';
 import node from '@astrojs/node';
+import runtimeLogger from '@inox-tools/runtime-logger';
 import astrolace from '@matthiesenxyz/astrolace';
 import robotsTXT from 'astro-robots';
 import { defineConfig, envField } from 'astro/config';
@@ -27,6 +28,7 @@ export default defineConfig({
 				{ userAgent: '*', disallow: ['/api/'] },
 			],
 		}),
+		runtimeLogger(),
 	],
 	experimental: {
 		env: {
