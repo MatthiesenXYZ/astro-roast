@@ -23,4 +23,11 @@ export default defineConfig({
 			},
 		},
 	},
+	vite: {
+		build: {
+			rollupOptions: {
+				external: ['@matthiesenxyz/integration-utils'],
+			},
+		},
+	},
 });
