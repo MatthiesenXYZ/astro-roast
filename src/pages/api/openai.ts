@@ -208,7 +208,7 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 		}
 
 		// Return the roast
-		console.log(`Roast generation successful for ${username} in ${language}`);
+		logger.info(`Roast generation successful for ${username} in ${language}`);
 		return jsonResponse({ roast }, 200);
 	} catch (error) {
 		// Log any errors from OpenAI API
