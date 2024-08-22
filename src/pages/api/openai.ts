@@ -23,6 +23,17 @@ const headers: Record<string, string> = {
 	'User-Agent': SITE_DOMAIN,
 };
 
+// Define the GET API route
+export const GET: APIRoute = async (context: APIContext): Promise<Response> => {
+	return jsonResponse(
+		{
+			error:
+				"You've attempted to perform a GET request on a POST-only API. Much like trying to cook ramen with cold water, this just won't work. Check your methods before sending them out into the world.",
+		},
+		405
+	);
+};
+
 // Define the POST API route
 export const POST: APIRoute = async (context: APIContext): Promise<Response> => {
 	// Get form data from the request

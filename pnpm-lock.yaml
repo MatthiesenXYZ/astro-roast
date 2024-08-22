@@ -21,8 +21,8 @@ dependencies:
     specifier: ^0.3.1
     version: 0.3.1(astro@4.14.4)
   '@matthiesenxyz/astrolace':
-    specifier: ^0.2.0
-    version: 0.2.0(@types/react@18.3.3)(astro@4.14.4)
+    specifier: ^0.3.0
+    version: 0.3.0(@types/react@18.3.3)(astro@4.14.4)
   '@matthiesenxyz/unocss-preset-daisyui':
     specifier: ^0.1.1
     version: 0.1.1(daisyui@4.12.10)(unocss@0.62.2)
@@ -1589,10 +1589,10 @@ packages:
       '@lit-labs/ssr-dom-shim': 1.2.1
     dev: false
 
-  /@matthiesenxyz/astrolace@0.2.0(@types/react@18.3.3)(astro@4.14.4):
-    resolution: {integrity: sha512-tT1Mt1wh6jw48wGT0TNbdABNbHc+jUziKhCGKGUq1kxzbSTPtm8ByBOn9k7T821omFIh8wSX2GFnyxYvouS01w==}
+  /@matthiesenxyz/astrolace@0.3.0(@types/react@18.3.3)(astro@4.14.4):
+    resolution: {integrity: sha512-o87e9mSLzYuJpKYvGilWwLQy7nWypiB15Rj53NTmtoDGY3aLBKThHJn2CnU3c6hKXa0BBIIusxP1HGDLLH/d9A==}
     peerDependencies:
-      astro: '>=4.12'
+      astro: '>=4.14'
     dependencies:
       '@shoelace-style/shoelace': 2.16.0(@types/react@18.3.3)
       astro: 4.14.4(typescript@5.5.4)
