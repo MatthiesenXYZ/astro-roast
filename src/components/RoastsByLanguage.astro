@@ -1,7 +1,7 @@
 ---
 import { Card, Icon } from 'astrolace:components';
-import { toPascalCase } from '@matthiesenxyz/integration-utils';
 import { getRoastPath, getRoasts } from '../lib/roastCollection';
+import { languages } from '../lib/supportedLanguages';
 import { getSvg } from '../lib/svgMap';
 
 interface Props {
@@ -15,7 +15,7 @@ const previousRoasts = await (await getRoasts()).byLanguage(language);
 ---
 
 <Card class="web-frame">
-    <h2 class="text-2xl font-bold text-secondary text-shadow-lg">Roasts <span class="text-accent">({toPascalCase(language)})</span></h2>
+    <h2 class="text-2xl font-bold text-secondary text-shadow-lg">Roasts <span class="text-accent">({languages[language].name})</span></h2>
     
     <div class="py-2 divider"></div>
             
@@ -31,7 +31,7 @@ const previousRoasts = await (await getRoasts()).byLanguage(language);
             
         </div>
     )): (
-        <h2 class="text-xl font-bold text-secondary text-shadow-lg">Roasts <span class="text-accent">({toPascalCase(language)})</span></h2>
+        <h2 class="text-xl font-bold text-secondary text-shadow-lg">Roasts <span class="text-accent">({languages[language].name})</span></h2>
         <div class="py-2"></div>
         <p>No roasts found.</p>
     )}

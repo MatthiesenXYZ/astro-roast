@@ -1,5 +1,4 @@
 import { RoastCollection, and, db, eq } from 'astro:db';
-import { toPascalCase } from '@matthiesenxyz/integration-utils';
 import { languages } from './supportedLanguages';
 
 // Get the Previous Roasts by language
@@ -66,7 +65,7 @@ export const makeDescription = (roast?: {
 }) => {
 	if (!roast) return 'Get Roasted!';
 
-	return `${toPascalCase(roast.username)} (${languages[roast.language].name}): "${roast.response.slice(0, 150).trimEnd()}...." — All roasts are only meant for fun! And should not be taken seriously.`;
+	return `${roast.username} (${languages[roast.language].name}): "${roast.response.slice(0, 150).trimEnd()}...." — All roasts are only meant for fun! And should not be taken seriously.`;
 };
 
 // Function to get the OG image path
