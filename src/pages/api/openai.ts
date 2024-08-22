@@ -24,7 +24,7 @@ const headers: Record<string, string> = {
 };
 
 // Define the GET API route
-export const GET: APIRoute = async (context: APIContext): Promise<Response> => {
+export const GET: APIRoute = async (): Promise<Response> => {
 	return jsonResponse(
 		{
 			error:
