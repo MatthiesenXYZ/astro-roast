@@ -9,7 +9,7 @@ const { language } = Astro.params;
 
 // Check if the language is supported
 if (!language || languages[language] === undefined || languages[language] === null) {
-	return Astro.redirect('/404');
+	return Astro.rewrite('/404');
 }
 
 // Fetch the roast data
