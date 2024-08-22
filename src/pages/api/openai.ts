@@ -101,12 +101,14 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 			useToken = true;
 		} else {
 			// Log the error and return a 500 response
-			logger.error(`Error fetching from Github, try again later. Status: ${profileResponse}`);
+			logger.error(
+				`Error fetching from Github, try again later. Status: ${JSON.stringify(profileResponse)}`
+			);
 			return jsonResponse({ error: 'Error fetching from Github, try again later.' }, 500);
 		}
 	} catch (error) {
 		// Log the error and try fetching without the token
-		logger.error(error as string);
+		logger.error(JSON.stringify(error));
 
 		// Fetch user profile without the token
 		const response = await fetch(API.USER, { headers });
@@ -143,7 +145,7 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 		}
 	} catch (error) {
 		// Log the error and try fetching from the fallback location
-		logger.error(error as string);
+		logger.error(JSON.stringify(error));
 
 		// Fetch README from the fallback location
 		try {
@@ -156,7 +158,7 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 			}
 		} catch (error) {
 			// Log the error and set readmeResponse to an empty string
-			logger.error(`failed to get readme${error}`);
+			logger.error(`failed to get readme${JSON.stringify(error)}`);
 			readmeResponse = '';
 		}
 	}
@@ -215,7 +217,7 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 			]);
 		} catch (error) {
 			// Log any errors while saving to the database
-			logger.error(`Error saving to database:${error}`);
+			logger.error(`Error saving to database:${JSON.stringify(error)}`);
 		}
 
 		// Return the roast
@@ -223,7 +225,7 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 		return jsonResponse({ roast }, 200);
 	} catch (error) {
 		// Log any errors from OpenAI API
-		logger.error(`Error:${error}`);
+		logger.error(`Error: ${JSON.stringify(error)}`);
 		return jsonResponse({ error: 'Failed to generate roast' }, 500);
 	}
 };
