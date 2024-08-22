@@ -32,6 +32,9 @@ dependencies:
   astro:
     specifier: ^4.14.4
     version: 4.14.4(typescript@5.5.4)
+  astro-robots:
+    specifier: ^2.0.1
+    version: 2.0.1
   html-entities:
     specifier: ^2.5.2
     version: 2.5.2
@@ -2430,6 +2433,10 @@ packages:
       astro: 4.14.4(typescript@5.5.4)
       pathe: 1.1.2
       recast: 0.23.9
+    dev: false
+
+  /astro-robots@2.0.1:
+    resolution: {integrity: sha512-1yBXF7uEcX4kyKfuzGn1fwxkuhY+ID/WA0gg9VgtD0CmOlsPy48tmVSpfN10gwN8h4/qhfnAOA2h8avxmgaG4A==}
     dev: false
 
   /astro@4.14.4(typescript@5.5.4):

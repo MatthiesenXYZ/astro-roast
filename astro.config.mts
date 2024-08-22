@@ -1,6 +1,7 @@
 import db from '@astrojs/db';
 import node from '@astrojs/node';
 import astrolace from '@matthiesenxyz/astrolace';
+import robotsTXT from 'astro-robots';
 import { defineConfig, envField } from 'astro/config';
 import UnoCSS from 'unocss/astro';
 import { SITE_URL } from './consts';
@@ -14,7 +15,19 @@ export default defineConfig({
 	adapter: node({
 		mode: 'standalone',
 	}),
-	integrations: [db(), astrolace(), UnoCSS({ injectReset: true })],
+	integrations: [
+		db(),
+		astrolace(),
+		UnoCSS({ injectReset: true }),
+		robotsTXT({
+			host: siteUrl.replace(/^https?:\/\/|:\d+/g, ''),
+			sitemap: false,
+			policy: [
+				{ userAgent: '*', allow: ['/'] },
+				{ userAgent: '*', disallow: ['/api/'] },
+			],
+		}),
+	],
 	experimental: {
 		env: {
 			schema: {
