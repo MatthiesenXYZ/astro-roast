@@ -1,5 +1,16 @@
 ---
-import { Alert, Button, Card, Icon, Input, Option, Select } from 'astrolace:components';
+import {
+	Alert,
+	Button,
+	Card,
+	Checkbox,
+	Divider,
+	Icon,
+	Input,
+	Option,
+	Select,
+	Tooltip,
+} from 'astrolace:components';
 import { languages } from '../lib/supportedLanguages';
 import { getSvg } from '../lib/svgMap';
 ---
@@ -30,6 +41,20 @@ import { getSvg } from '../lib/svgMap';
 			}
 		</Select>
 
+		<div class="py-2"></div>
+
+		{/* Warning that this is 100% for fun! and not meant to be serious */}
+		<Tooltip placement={'top-start'}>
+			<div slot="content" class="flex flex-col items-center gap-1">
+				<h3 class="font-bold">⚠️ Warning: The Roast AI Bot is here to roast, toast, and boast with humor that's strictly for fun! ⚠️</h3>
+				<p>By engaging with this bot, you agree to take nothing seriously, except maybe how much you laugh. All comments, jokes, and burns are meant to be lighthearted and in good spirits. If you're not in the mood for some playful banter, it's best to proceed with caution. Remember, it's all in good fun—so don't get too crispy! 🌶🔥</p>
+				<Divider class='divider my-0 py-2' />
+				<p>Disclaimer: No feelings were harmed in the making of these roasts.</p>
+			</div>
+			<p class="flex text-accent font-bold items-center align-center gap-1 pb-1"><Icon class="text-white pr-1" src={getSvg("exclamation")} />Disclaimer (Hover)</p>
+			<Checkbox name='disclaimer'>I Understand the Above</Checkbox>
+		</Tooltip>
+		
 		<div class="py-2"></div>
 
 		<Button 
@@ -125,6 +150,9 @@ import JSConfetti from 'js-confetti'
 		const formData = new FormData(form);
 		const username = formData.get('username');
 		const language = formData.get('language');
+		const disclaimer = formData.get('disclaimer');
+
+		console.log('disclaimer', disclaimer);
 
         // validate username
         if (!username || typeof username !== 'string' || username.trim() === '') {
@@ -133,6 +161,14 @@ import JSConfetti from 'js-confetti'
             setButton(roastButton, false);
             return;
         }
+
+		// validate disclaimer
+		if (disclaimer === null) {
+			roastAlert.innerText = 'Please read and accept the disclaimer.';
+			roastAlert.toast();
+			setButton(roastButton, false);
+			return;
+		}
 
 		// Perform the fetch request to the OpenAI API
 		fetch(form.action, {
