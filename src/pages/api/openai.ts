@@ -180,6 +180,7 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 			stream: false,
 			messages: [
 				{ role: 'system', content: OPENAI_SYS_PROMPT },
+				{ role: 'user', content: `Respond in the following Language: ${languages[language].name}` },
 				{ role: 'user', content: prompt },
 			],
 		});
