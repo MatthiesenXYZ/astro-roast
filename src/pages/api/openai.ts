@@ -26,7 +26,7 @@ const headers: Record<string, string> = {
 export const POST: APIRoute = async (context: APIContext): Promise<Response> => {
 	// Get form data from the request
 	const formData = await context.request.formData();
-	const username = formData.get('username')?.toString();
+	const username = formData.get('username')?.toString().trim();
 	const language = formData.get('language')?.toString();
 
 	console.log('username:', username);
