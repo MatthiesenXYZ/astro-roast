@@ -9,12 +9,12 @@ const { language, username } = Astro.params;
 
 // Validate the language and username
 if (!language || !username) {
-	throw new Error('Language and username are required.');
+	return Astro.redirect('/404');
 }
 
 // Check if the language is supported
 if (languages[language] === undefined || languages[language] === null) {
-	throw new Error(`Language "${language}" is invalid or not yet supported.`);
+	return Astro.redirect('/404');
 }
 
 // Fetch the roast data

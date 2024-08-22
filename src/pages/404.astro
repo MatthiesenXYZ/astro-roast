@@ -1,0 +1,20 @@
+---
+import { Icon } from 'astrolace:components';
+import Layout from '../layouts/Layout.astro';
+import { getOgImagePath, getRoasts, makeDescription } from '../lib/roastCollection';
+import { getSvg } from '../lib/svgMap';
+
+// Fetch the last roast for the description and OG image
+const roast = await (await getRoasts()).lastRoast();
+
+// Generate description and OG image path
+const description = makeDescription(roast);
+const ogImage = getOgImagePath(roast);
+---
+<Layout title="Not Found" {description} {ogImage}>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 50vh;">
+        <h1 class="font-sans font-bold text-error text-shadow-lg text-16 pb-8">404 - Not Found</h1>
+        <p class="font-sans text-accent text-shadow-lg text-8 pb-8">Oops! The roast you are looking for was not found.</p>
+        <a href="/" style="padding: 12px 24px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 4px;"><span class="inline flex align-center items-center gap-2 ">Back to the Roaster <Icon src={getSvg('back')} /></span></a>
+    </div>
+</Layout>

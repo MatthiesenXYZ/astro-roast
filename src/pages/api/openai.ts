@@ -29,8 +29,7 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 	const username = formData.get('username')?.toString().trim();
 	const language = formData.get('language')?.toString();
 
-	console.log('username:', username);
-	console.log('language:', language);
+	console.log(`New roast request for ${username} in ${language}`);
 
 	// Validate username and language
 	if (!username || !language) {
@@ -204,6 +203,7 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 		}
 
 		// Return the roast
+		console.log(`Roast generation successful for ${username} in ${language}`);
 		return jsonResponse({ roast }, 200);
 	} catch (error) {
 		// Log any errors from OpenAI API
