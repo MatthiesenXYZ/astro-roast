@@ -29,6 +29,9 @@ export const POST: APIRoute = async (context: APIContext): Promise<Response> => 
 	const username = formData.get('username')?.toString();
 	const language = formData.get('language')?.toString();
 
+	console.log('username:', username);
+	console.log('language:', language);
+
 	// Validate username and language
 	if (!username || !language) {
 		return jsonResponse({ error: 'Missing username or language' }, 400);
